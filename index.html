@@ -188,7 +188,8 @@ const h=(t,a,...kids)=>{const e=document.createElement(t);for(const[k,v]of Objec
 
 let cur=1;
 try{const s=+localStorage.getItem("day");if(DAYS.some(d=>d.n===s))cur=s}catch{}
-{const t=(location.hash||"").match(/^#day(\d+)$/);if(t&&DAYS.some(d=>d.n===+t[1]))cur=+t[1]}
+const hashDay=()=>{const t=(location.hash||"").match(/^#day(\d+)$/);return t&&DAYS.some(d=>d.n===+t[1])?+t[1]:null};
+cur=hashDay()??cur;
 for(const c of Object.keys(CITIES)){const n=DAYS.filter(d=>d.city===c).length;$("#n-"+c).textContent=n?`${n} day${n>1?"s":""}`:""}
 
 function go(n,scroll){cur=n;try{localStorage.setItem("day",String(n))}catch{}history.replaceState(null,"","#day"+n);render();
@@ -214,10 +215,13 @@ function render(){
       next?h("button",{type:"button",onclick:()=>go(next.n,true)},h("span",{class:"t",text:`Day ${next.n} · ${next.title}`}),h("span",{text:"›"})):h("span")));
 }
 document.querySelectorAll(".stop").forEach(b=>b.addEventListener("click",()=>{const d=DAYS.find(x=>x.city===b.dataset.city);if(d)go(d.n,true)}));
-document.addEventListener("keydown",e=>{if(e.key==="ArrowRight")step(1);else if(e.key==="ArrowLeft")step(-1)});
+document.addEventListener("keydown",e=>{if(e.altKey||e.ctrlKey||e.metaKey||e.shiftKey||e.defaultPrevented)return;if(e.target.closest?.("input,textarea,select,[contenteditable]:not([contenteditable='false'])"))return;if(e.key==="ArrowRight")step(1);else if(e.key==="ArrowLeft")step(-1)});
+window.addEventListener("hashchange",()=>{const n=hashDay();if(n!=null&&n!==cur)go(n)});
 {let x0=null,y0=0;const el=$("#days");
-  el.addEventListener("touchstart",e=>{if(e.target.closest(".pills")){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
-  el.addEventListener("touchend",e=>{if(x0==null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))step(dx<0?1:-1)});}
+  el.addEventListener("touchstart",e=>{if(e.touches.length>1||e.target.closest(".pills")){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  el.addEventListener("touchcancel",()=>{x0=null},{passive:true});
+  el.addEventListener("touchend",e=>{if(x0==null)return;if(e.touches.length){x0=null;return}const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))step(dx<0?1:-1)});}
+history.replaceState(null,"","#day"+cur);
 render();
 </script>
 </body>
