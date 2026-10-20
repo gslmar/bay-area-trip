@@ -16,7 +16,7 @@
 :root{
   --bg:#F1F4F3; --surface:#FFFFFF; --soft:#E5ECEA; --line:#D5DEDB;
   --ink:#13201E; --muted:#586764; --accent:#0D6B59; --accent-ink:#FFFFFF;
-  --hk:#C3302A; --sz:#1B6BB2; --gz:#A8701A;
+  --hk:#C3302A; --sz:#1B6BB2; --gz:#8A5A12;
   --f-display:"Bricolage Grotesque","Noto Sans",system-ui,sans-serif;
   --f-body:"Noto Sans","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-zh:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
@@ -57,7 +57,7 @@ h1{font-size:clamp(26px,6vw,38px);font-weight:700;letter-spacing:-.01em}
 .leg span{font-size:11px;color:var(--muted);white-space:nowrap}
 
 .pager{display:grid;grid-template-columns:auto 1fr auto;gap:6px;align-items:center;position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:8px;margin-top:18px}
-.nav{width:40px;height:40px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:20px;cursor:pointer}
+.nav{width:44px;height:44px;border-radius:10px;border:1px solid var(--line);background:var(--surface);font-size:20px;cursor:pointer}
 .nav:disabled{opacity:.4;cursor:default}
 .pills{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding:3px 2px;min-width:0}
 .pills::-webkit-scrollbar{display:none}
@@ -83,12 +83,12 @@ h1{font-size:clamp(26px,6vw,38px);font-weight:700;letter-spacing:-.01em}
 .plan li{display:grid;grid-template-columns:52px 1fr;gap:8px}
 .plan .t{font-family:var(--f-mono);font-size:13px;color:var(--muted);padding-top:2px;font-variant-numeric:tabular-nums}
 .pnav{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
-.pnav button{display:flex;justify-content:space-between;gap:6px;align-items:center;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:600;font-size:14px}
+.pnav button{min-height:44px;display:flex;justify-content:space-between;gap:6px;align-items:center;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:600;font-size:14px}
 .pnav span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 
 .private{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--soft);border-radius:14px;padding:14px 16px}
 .private p{margin:2px 0 0;font-size:13px;color:var(--muted);max-width:46ch}
-.cta{display:inline-flex;align-items:center;border-radius:10px;background:var(--accent);color:var(--accent-ink);padding:9px 14px;font-weight:600;text-decoration:none;font-size:14px}
+.cta{min-height:44px;display:inline-flex;align-items:center;border-radius:10px;background:var(--accent);color:var(--accent-ink);padding:9px 14px;font-weight:600;text-decoration:none;font-size:14px}
 
 .tips-h{margin:28px 0 10px;font-size:20px}
 .tips{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -106,8 +106,11 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
   .when b{font-size:22px}
   .route{padding:8px 6px;gap:2px}
   .stop .zh{font-size:18px}
-  .leg span{font-size:10px}
+  .stop{padding:6px 4px}
+  .leg span{font-size:10px;white-space:normal;text-align:center;line-height:1.15}
 }
+/* Too narrow for the rail times between stops; they're also in the Essentials table. */
+@media (max-width:380px){.leg span{display:none}}
 @media (prefers-reduced-motion:no-preference){.day{animation:rise .25s ease-out both}@keyframes rise{from{transform:translateY(4px)}to{transform:none}}}
 </style>
 </head>
@@ -133,7 +136,7 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
       <b>Family diary, photos and votes</b>
       <p>These are kept private. Family members open them through the invite-only trip app.</p>
     </div>
-    <a class="cta" href="https://claude.ai/artifact/5FwJvGtvzKvMfABz6LJvGd" target="_blank" rel="noopener">Open the family app</a>
+    <a class="cta" href="https://claude.ai/artifact/5FwJvGtvzKvMfABz6LJvGd" target="_blank" rel="noopener">Family members: open the app</a>
   </section>
 
   <h2 class="tips-h">Essentials</h2>
