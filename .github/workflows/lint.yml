@@ -1,0 +1,19 @@
+name: Lint
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      # Pinned so a new release can't turn CI red on its own; no package.json needed.
+      - run: npm i --no-save html-validate@11 eslint@10 @eslint/js@10 globals@17
+      - run: npx html-validate index.html
+      - run: npx eslint app.js
