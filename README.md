@@ -8,7 +8,7 @@ The family diary, photos, votes and expenses are kept in a private, invite-only 
 
 ## Updating the itinerary
 
-All trip data lives at the top of `app.js`: `CITIES`, `RAIL` and `DAYS`. The subtitle, route strip, rail table and day pages are built from it, so change a fact there once. Day numbers come from each day's position in `DAYS`, and each plan item is `["HH:MM", "Activity"]`. An optional `alt` list holds swap options for the day. A mistyped time logs a warning in the browser console.
+All trip data lives at the top of `app.js`: `CITIES`, `RAIL`, `DAYS`, and for the rail guide `TRAINS`, `STATIONS` and `RAIL_NOTES`. Sample trains in `TRAINS` come from published timetables; check them against 12306 when the timetable changes. The subtitle, route strip, rail table and day pages are built from it, so change a fact there once. Day numbers come from each day's position in `DAYS`, and each plan item is `["HH:MM", "Activity"]`. An optional `alt` list holds swap options for the day. A mistyped time logs a warning in the browser console.
 
 `FOOD` (where to eat) and `CHECKLIST` (before you go) sit next to it. `sw.js` keeps an offline copy of the page; bump its `CACHE` name if you add or rename a file it lists.
 

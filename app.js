@@ -86,6 +86,44 @@ const DAYS=[
 for(const d of DAYS){if(!CITIES[d.city])console.warn(`Day ${d.n}: unknown city "${d.city}"`);
   for(const[t]of d.plan)if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(t))console.warn(`Day ${d.n}: time "${t}" isn't HH:MM`)}
 
+// High-speed rail: the three train legs. `samples` are trains seen in recent published timetables, not bookings;
+// timetables change (the last national change was 1 July 2026), so the page tells people to confirm on 12306.
+const TRAINS=[
+  {day:2,city:"sz",from:"hkwk",to:"ft",aim:"14:00",dur:"14–16 min",freq:"Roughly every 20–60 minutes",
+   samples:[["G5810","14:32","14:47"]],
+   tips:["Be at West Kowloon 45–60 min early: Hong Kong exit and mainland entry are both inside the station.","Ticket gates close about 5–10 minutes before departure."]},
+  {day:4,city:"gz",from:"ft",to:"gze",aim:"14:00",dur:"About 1–1.5 h (faster trains skip stops)",freq:"About 36 direct trains a day",
+   samples:[["C8016","14:00","14:57"],["D7562","13:58","15:06"]],
+   tips:["Pick a C or D train that ends at Guangzhou East, not Guangzhou South.","Be at Futian 30–40 min early for the security and passport check."]},
+  {day:5,city:"hk",from:"gze",to:"hkwk",aim:"14:30",dur:"About 1 h 35 – 1 h 55",freq:"About hourly in the afternoon",
+   samples:[["G6567","13:47","≈15:30"],["G6557","14:41","≈16:20"],["G6559","15:40","≈17:20"]],
+   tips:["Mainland exit is at Guangzhou East; Hong Kong entry is after arrival at West Kowloon.","Be at Guangzhou East 45 min early."]}
+];
+// Stations, with names to show a taxi driver. Map links open Google Maps (Hong Kong) or Amap (mainland, where Google is blocked).
+const STATIONS={
+  hkwk:{city:"hk",short:"West Kowloon",en:"Hong Kong West Kowloon",zh:"香港西九龍站",map:"https://www.google.com/maps/search/?api=1&query=Hong+Kong+West+Kowloon+Station",
+    metro:"MTR Austin (Tuen Ma line), one stop from East Tsim Sha Tsui; Kowloon station (Airport Express) is a 10-minute walk.",
+    tip:"Follow signs for High Speed Rail. Departures and both immigration checks are on the lower floors."},
+  ft:{city:"sz",short:"Futian",en:"Shenzhen Futian Station",zh:"福田站",map:"https://uri.amap.com/search?keyword=%E7%A6%8F%E7%94%B0%E7%AB%99",
+    metro:"Underground in the Futian CBD, on Metro Lines 2, 3 and 11 (Futian station). Taxi or Didi to the hotel area is about 15 minutes.",
+    tip:"Not the same as Futian Checkpoint (福田口岸), the land border by Lok Ma Chau."},
+  gze:{city:"gz",short:"Guangzhou East",en:"Guangzhou East Station",zh:"广州东站",map:"https://uri.amap.com/search?keyword=%E5%B9%BF%E5%B7%9E%E4%B8%9C%E7%AB%99",
+    metro:"Metro Lines 1 and 3 (Guangzhou East Railway Station). Taxi to the Tianhe hotel is about 10 minutes.",
+    tip:"Not Guangzhou South (广州南站), which is about 40 minutes further out."}
+};
+// Practical notes for visitors from outside the mainland.
+const RAIL_NOTES=[
+  ["Your passport is your ticket","Buy each ticket with that person's passport on the 12306 app (English, accepts foreign passports), Trip.com or Klook. Scan the passport at the gates; if it doesn't read, use the staffed gate (人工通道)."],
+  ["Book early","Sales open about 15 days ahead and afternoon trains on weekends sell out. Buy all three legs as soon as they open."],
+  ["Seats for three together","Second class is laid out A-B-C | D-F. Choose A, B and C to sit in one row; A and F are windows."],
+  ["Find your gate","Station screens list trains by number, not destination. Look for your train number and its gate (检票口)."],
+  ["Security","Bags are X-rayed at every station. Lighters aren't allowed; power banks and drinks are fine."],
+  ["Boarding","Gates open about 15–20 minutes before departure and close a few minutes before. Your car (车厢) and seat are on the e-ticket, and the platform floor shows where each car stops."],
+  ["Luggage","Overhead racks take carry-on bags; large suitcases go behind the last row or in the racks at the end of each car."],
+  ["On board","No smoking or vaping anywhere (it sets off alarms and brings fines). Hot water is free near the doors."],
+  ["Changes","You can change to another train on 12306 before departure; refunds carry a small fee that rises closer to departure."],
+  ["Keep your passport handy","You scan it again to leave the station, and you need it for immigration at West Kowloon."]
+];
 // Where to eat: the roast goose and dim sum stops from the day plans. `book`: true = reserve ahead, false = queue (no bookings).
 const FOOD=[
   {city:"hk",name:"Yung Kee",area:"Central",what:"Roast goose",book:true,day:1},
@@ -114,6 +152,7 @@ const CHECKLIST=[
   "Check whether in-town check-in at Kowloon Station is available for the flight home",
   "Pack a universal adapter and a light jacket"
 ];
+for(const t of TRAINS)if(!STATIONS[t.from]||!STATIONS[t.to]||!DAYS.some(d=>d.n===t.day))console.warn(`Train on day ${t.day}: bad station or day`);
 for(const f of FOOD)if(!CITIES[f.city]||!DAYS.some(d=>d.n===f.day))console.warn(`Food "${f.name}": bad city or day`);
 // Plan rows are tagged from their text so trains and meals stand out.
 const kind=what=>/(high-speed|intercity) train/i.test(what)?"rail":/dim sum|roast goose|morning tea|lunch|dinner/i.test(what)?"food":"";
@@ -204,6 +243,22 @@ window.addEventListener("hashchange",()=>{const n=hashDay();if(n!=null&&n!==cur)
   el.addEventListener("touchcancel",()=>{x0=null},{passive:true});
   el.addEventListener("touchend",e=>{if(x0==null)return;if(e.touches.length){x0=null;return}const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))step(dx<0?1:-1)});}
 
+// High-speed rail section: one card per leg, then stations, then notes.
+$("#trains").append(...TRAINS.map(t=>{const a=STATIONS[t.from],b=STATIONS[t.to];
+  return h("article",{class:"card leg-card "+t.city},
+    h("p",{class:"eyebrow"},h("a",{href:"#day"+t.day,onclick:e=>{e.preventDefault();go(t.day,true,true)},text:"Day "+t.day})," · aim for about ",t.aim),
+    h("h3",{},a.short," → ",b.short),
+    h("p",{class:"legline"},h("span",{class:"zh",text:a.zh})," → ",h("span",{class:"zh",text:b.zh})),
+    h("dl",{class:"facts"},h("dt",{text:"Journey"}),h("dd",{text:t.dur}),h("dt",{text:"Frequency"}),h("dd",{text:t.freq})),
+    h("table",{class:"samples"},h("caption",{text:"Trains around that time in recent timetables"}),
+      h("thead",{},h("tr",{},h("th",{text:"Train"}),h("th",{text:"Departs"}),h("th",{text:"Arrives"}))),
+      h("tbody",{},t.samples.map(([n,d,ar])=>h("tr",{},h("td",{text:n}),h("td",{text:d}),h("td",{text:ar}))))),
+    h("ul",{class:"legtips"},t.tips.map(x=>h("li",{text:x}))))}));
+$("#stations").append(...Object.values(STATIONS).map(st=>h("div",{class:"card station "+st.city},
+  h("h3",{text:st.en}),h("p",{class:"zhname"},h("span",{class:"zh",text:st.zh}),h("small",{class:"muted",text:" show this to a taxi driver"})),
+  h("p",{text:st.metro}),h("p",{class:"muted",text:st.tip}),
+  h("a",{class:"maplink",href:st.map,target:"_blank",rel:"noopener",text:"Open in maps"}))));
+$("#railnotes").append(...RAIL_NOTES.map(([t,x])=>h("li",{},h("b",{text:t}),h("span",{text:x}))));
 // Where to eat, grouped by city in route order.
 $("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+k},
   scene(k,"strip"),
