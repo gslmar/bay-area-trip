@@ -106,3 +106,42 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
 .alt{border-top:1px dashed var(--line);padding-top:10px}
 .alt h3{font-family:var(--f-body);margin-bottom:4px}
 .alt ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:3px}
+
+/* Trains and meals stand out in the day plan. */
+.plan li.rail{background:color-mix(in srgb,var(--city) 10%,transparent);border-radius:8px;padding:4px 6px;margin-inline:-6px;font-weight:600}
+.plan li.food>span:last-child::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:middle}
+.tag{display:inline-block;margin-left:6px;font-size:11px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;padding:0 6px;border-radius:999px;border:1px solid var(--city);color:var(--city);vertical-align:1px}
+
+/* Where to eat */
+.lead{margin:-4px 0 10px;font-size:14px}
+.foods{grid-template-columns:repeat(3,1fr)}
+.foods .card{border-top:3px solid var(--city)}
+.foods h3{color:var(--city)}
+.food{list-style:none;margin:0;padding:0!important;display:flex;flex-direction:column;gap:10px}
+.food small{font-size:12px}
+.food .meta{display:flex;flex-wrap:wrap;gap:4px 8px;font-size:12px;color:var(--muted);margin-top:2px;align-items:center}
+.food .bk,.food .q{padding:0 7px;border-radius:999px;font-weight:600}
+.food .bk{background:color-mix(in srgb,var(--accent) 15%,transparent);color:var(--accent)}
+.food .q{background:var(--soft)}
+.food a{color:var(--accent);font-weight:600;min-height:24px;display:inline-flex;align-items:center}
+
+/* Checklist */
+.card.wide{grid-column:1/-1}
+.card.wide h3 small{font-family:var(--f-body);font-size:12px;font-weight:400;margin-left:6px}
+.checks{list-style:none;padding:0!important;display:grid;grid-template-columns:1fr 1fr;gap:4px 16px}
+.checks label{display:flex;gap:10px;align-items:flex-start;min-height:44px;padding:6px 0;cursor:pointer}
+.checks input{width:20px;height:20px;margin:1px 0 0;flex:none;accent-color:var(--accent)}
+.checks input:checked+span{color:var(--muted);text-decoration:line-through}
+@media (max-width:600px){.foods{grid-template-columns:1fr}.checks{grid-template-columns:1fr}}
+
+/* Print: every day, no controls. */
+.print-only{display:none}
+@media print{
+  :root{--bg:#fff;--surface:#fff}
+  body{print-color-adjust:exact;-webkit-print-color-adjust:exact}
+  body{font-size:12px}
+  .pager,.pnav,#days,.private,.route,.cta{display:none!important}
+  .print-only{display:block}
+  .print-only .day{break-inside:avoid;margin-top:10px;animation:none}
+  .card{break-inside:avoid}
+}

@@ -16,4 +16,4 @@ jobs:
       # Pinned so a new release can't turn CI red on its own; no package.json needed.
       - run: npm i --no-save html-validate@11 eslint@10 @eslint/js@10 globals@17
       - run: npx html-validate index.html
-      - run: npx eslint app.js
+      - run: npx eslint app.js sw.js
