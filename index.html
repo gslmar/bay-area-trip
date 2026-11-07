@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#0D6B59">
@@ -11,6 +11,7 @@
 <meta name="description" content="Family itinerary for Hong Kong, Shenzhen and Guangzhou.">
 <link rel="icon" href="icon-192.png" type="image/png">
 <link rel="apple-touch-icon" href="icon-192.png">
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -23,6 +24,11 @@
 
   <main id="days"></main>
   <p class="sr-only" id="status" aria-live="polite"></p>
+  <div id="print-days" class="print-only"></div>
+
+  <h2 class="tips-h">Where to eat</h2>
+  <p class="muted lead">Roast goose and dim sum, city by city. "Queue" places take no bookings, so go early.</p>
+  <div class="tips foods" id="food"></div>
 
   <div class="private">
     <div>
@@ -34,6 +40,11 @@
 
   <h2 class="tips-h">Essentials</h2>
   <div class="tips">
+    <div class="card wide">
+      <h3>Before you go <small class="muted" id="check-count"></small></h3>
+      <ul class="checks" id="checklist"></ul>
+      <p class="muted note">Ticks are saved on this device only.</p>
+    </div>
     <div class="card">
       <h3>Getting between cities</h3>
       <table class="rail"><tbody id="rail"></tbody></table>

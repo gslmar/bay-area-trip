@@ -85,6 +85,38 @@ const DAYS=[
 for(const d of DAYS){if(!CITIES[d.city])console.warn(`Day ${d.n}: unknown city "${d.city}"`);
   for(const[t]of d.plan)if(!/^([01]\d|2[0-3]):[0-5]\d$/.test(t))console.warn(`Day ${d.n}: time "${t}" isn't HH:MM`)}
 
+// Where to eat: the roast goose and dim sum stops from the day plans. `book`: true = reserve ahead, false = queue (no bookings).
+const FOOD=[
+  {city:"hk",name:"Yung Kee",area:"Central",what:"Roast goose",book:true,day:1},
+  {city:"hk",name:"Spring Moon / T'ang Court",area:"Tsim Sha Tsui",what:"Dim sum",book:true,day:1},
+  {city:"hk",name:"Luk Yu Tea House",area:"Central",what:"Dim sum",book:true,day:2},
+  {city:"hk",name:"Yat Lok",area:"Central",what:"Roast goose",book:false,day:2},
+  {city:"hk",name:"Kam's Roast Goose / Joy Hing",area:"Wan Chai",what:"Roast goose",book:false,day:5},
+  {city:"hk",name:"Maxim's Palace",area:"City Hall, Central",what:"Dim sum",book:false,day:6},
+  {city:"hk",name:"Yue Kee",area:"Sham Tseng",what:"Roast goose",book:true,day:6},
+  {city:"sz",name:"Laurel",area:"Futian",what:"Dim sum and roast goose",book:true,day:2},
+  {city:"sz",name:"Tao Tao Ju / Dian Dou De",area:"Futian",what:"Dim sum",book:false,day:3},
+  {city:"sz",name:"Fat Kee",area:"Michelin Bib Gourmand",what:"Roast goose",book:true,day:3},
+  {city:"sz",name:"The Bay by Chef Fei",area:"Two Michelin stars",what:"Cantonese",book:true,day:3},
+  {city:"gz",name:"Guangzhou Restaurant / Lei Garden",area:"Tianhe",what:"Roast goose",book:true,day:4},
+  {city:"gz",name:"Cheungloi Cook",area:"Huacheng Avenue",what:"Cantonese",book:true,day:4},
+  {city:"gz",name:"Tao Tao Ju / Panxi",area:"Liwan",what:"Morning tea",book:false,day:5}
+];
+// Before-you-go list. Ticks are saved in this browser only.
+const CHECKLIST=[
+  "Book the three train legs on 12306 as soon as sales open (about 15 days ahead), with all passports",
+  "Confirm each room's bed setup for three in writing",
+  "Book the restaurants marked \"Book ahead\"",
+  "Link a card in Alipay and WeChat Pay; test a small payment",
+  "Install Amap, Didi and 12306; sort out roaming or an eSIM",
+  "Check passports have 6+ months left and current entry rules",
+  "Check whether in-town check-in at Kowloon Station is available for the flight home",
+  "Pack a universal adapter and a light jacket"
+];
+for(const f of FOOD)if(!CITIES[f.city]||!DAYS.some(d=>d.n===f.day))console.warn(`Food "${f.name}": bad city or day`);
+// Plan rows are tagged from their text so trains and meals stand out.
+const kind=what=>/(high-speed|intercity) train/i.test(what)?"rail":/dim sum|roast goose|morning tea|lunch|dinner/i.test(what)?"food":"";
+
 const $=s=>document.querySelector(s);
 const h=(t,a,...kids)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a||{})){if(v==null||v===false)continue;if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="class")e.className=v;else if(k==="text")e.textContent=v;else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
 
@@ -113,8 +145,16 @@ function go(n,scroll,focusTitle){cur=n;try{localStorage.setItem("day",String(n))
   if(focusTitle)page.querySelector("h2").focus({preventScroll:true});
   if(scroll)$("#days").scrollIntoView({behavior:"smooth",block:"start"})}
 function step(k){const i=DAYS.findIndex(d=>d.n===cur);const d=DAYS[i+k];if(d)go(d.n)}
+function dayCard(d){const c=CITIES[d.city];
+  return h("article",{class:"day "+d.city},
+      h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`})),
+      h("div",{class:"body"},
+        h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
+        h("h2",{tabindex:"-1",text:d.title}),
+        h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{class:kind(what)||null},h("span",{class:"t",text:t}),h("span",{text:what},kind(what)==="rail"?h("span",{class:"tag",text:"Train"}):null)))),
+        d.alt?.length?h("div",{class:"alt"},h("h3",{class:"label",text:"Swap options on the day"}),h("ul",{},d.alt.map(a=>h("li",{text:a})))):null));}
 function render(){
-  const i=DAYS.findIndex(d=>d.n===cur),d=DAYS[i],prev=DAYS[i-1],next=DAYS[i+1],c=CITIES[d.city];
+  const i=DAYS.findIndex(d=>d.n===cur),d=DAYS[i],prev=DAYS[i-1],next=DAYS[i+1];
   document.querySelectorAll(".stop").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.city===d.city)));
   // Update the pager in place so the pressed button keeps focus; if it just became disabled, hand focus to the other arrow.
   const pb=pager.firstElementChild,nb=pager.lastElementChild,had=document.activeElement;
@@ -122,13 +162,7 @@ function render(){
   if(had===pb&&!prev)nb.focus();else if(had===nb&&!next)pb.focus();
   pager.querySelectorAll(".pill").forEach(p=>{if(+p.dataset.n===d.n)p.setAttribute("aria-current","step");else p.removeAttribute("aria-current")});
   page.replaceChildren(
-    h("article",{class:"day "+d.city},
-      h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`})),
-      h("div",{class:"body"},
-        h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
-        h("h2",{tabindex:"-1",text:d.title}),
-        h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{},h("span",{class:"t",text:t}),h("span",{text:what})))),
-        d.alt?.length?h("div",{class:"alt"},h("h3",{class:"label",text:"Swap options on the day"}),h("ul",{},d.alt.map(a=>h("li",{text:a})))):null)),
+    dayCard(d),
     h("div",{class:"pnav"},
       prev?h("button",{type:"button",onclick:()=>go(prev.n,true,true)},h("span",{"aria-hidden":"true",text:"‹"}),h("span",{class:"t",text:`Day ${prev.n} · ${prev.title}`})):h("span"),
       next?h("button",{type:"button",onclick:()=>go(next.n,true,true)},h("span",{class:"t",text:`Day ${next.n} · ${next.title}`}),h("span",{"aria-hidden":"true",text:"›"})):h("span")));
@@ -140,5 +174,25 @@ window.addEventListener("hashchange",()=>{const n=hashDay();if(n!=null&&n!==cur)
   el.addEventListener("touchstart",e=>{if(e.touches.length>1||e.target.closest(".pills")){x0=null;return}x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
   el.addEventListener("touchcancel",()=>{x0=null},{passive:true});
   el.addEventListener("touchend",e=>{if(x0==null)return;if(e.touches.length){x0=null;return}const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;if(Math.abs(dx)>60&&Math.abs(dx)>1.5*Math.abs(dy))step(dx<0?1:-1)});}
+
+// Where to eat, grouped by city in route order.
+$("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+k},
+  h("h3",{},h("span",{class:"zh",text:c.zh})," ",c.en),
+  h("ul",{class:"food"},FOOD.filter(f=>f.city===k).map(f=>h("li",{},
+    h("div",{},h("b",{text:f.name}),h("small",{class:"muted",text:` · ${f.area}`})),
+    h("div",{class:"meta"},h("span",{text:f.what}),h("span",{class:f.book?"bk":"q",text:f.book?"Book ahead":"Queue"}),
+      h("a",{href:"#day"+f.day,onclick:e=>{e.preventDefault();go(f.day,true,true)},text:"Day "+f.day}))))))));
+// Checklist with ticks kept in localStorage (per browser; fine if storage is blocked).
+{let done={};try{done=JSON.parse(localStorage.getItem("checks")||"{}")||{}}catch{}
+  const count=$("#check-count"),upd=()=>{count.textContent=`${CHECKLIST.filter(t=>done[t]).length} of ${CHECKLIST.length} done`};
+  $("#checklist").append(...CHECKLIST.map((t,i)=>h("li",{},h("label",{},
+    h("input",{type:"checkbox",id:"chk"+i,checked:!!done[t],onchange:e=>{if(e.target.checked)done[t]=1;else delete done[t];try{localStorage.setItem("checks",JSON.stringify(done))}catch{}upd()}}),
+    h("span",{text:t})))));upd()}
+// Printing shows every day, not just the current one.
+{const all=$("#print-days");
+  window.addEventListener("beforeprint",()=>all.replaceChildren(...DAYS.map(dayCard)));
+  window.addEventListener("afterprint",()=>all.replaceChildren())}
+// Offline copy for patchy connections; harmless where service workers aren't available.
+if("serviceWorker"in navigator&&window.isSecureContext)navigator.serviceWorker.register("sw.js").catch(()=>{});
 history.replaceState(null,"","#day"+cur);
 render();
