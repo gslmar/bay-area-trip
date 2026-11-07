@@ -84,7 +84,7 @@ h1{font-size:clamp(26px,6vw,38px);font-weight:700;letter-spacing:-.01em}
 .pnav button{min-height:44px;display:flex;justify-content:space-between;gap:6px;align-items:center;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:9px 12px;cursor:pointer;font-weight:600;font-size:14px}
 .pnav span.t{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}
 
-.private{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--soft);border-radius:14px;padding:14px 16px}
+.private{margin-top:16px;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;background:var(--soft);border-radius:14px;padding:14px 16px}
 .private p{margin:2px 0 0;font-size:13px;color:var(--muted);max-width:46ch}
 .cta{min-height:44px;display:inline-flex;align-items:center;border-radius:10px;background:var(--accent);color:var(--accent-ink);padding:9px 14px;font-weight:600;text-decoration:none;font-size:14px}
 
