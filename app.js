@@ -105,10 +105,10 @@ const STATIONS={
     metro:"MTR Austin (Tuen Ma line), one stop from East Tsim Sha Tsui; Kowloon station (Airport Express) is a 10-minute walk.",
     tip:"Follow signs for High Speed Rail. Departures and both immigration checks are on the lower floors."},
   ft:{city:"sz",short:"Futian",en:"Shenzhen Futian Station",zh:"福田站",map:"https://uri.amap.com/search?keyword=%E7%A6%8F%E7%94%B0%E7%AB%99",
-    metro:"Underground in the Futian CBD, on Metro Lines 2, 3 and 11 (Futian station). Taxi or Didi to the hotel area is about 15 minutes.",
+    metro:"Underground in the Futian CBD, on Metro Lines 2, 3 and 11 (Futian station). Didi to the Four Points (5 Guihua Road) is about 15 minutes.",
     tip:"Not the same as Futian Checkpoint (福田口岸), the land border by Lok Ma Chau."},
   gze:{city:"gz",short:"Guangzhou East",en:"Guangzhou East Station",zh:"广州东站",map:"https://uri.amap.com/search?keyword=%E5%B9%BF%E5%B7%9E%E4%B8%9C%E7%AB%99",
-    metro:"Metro Lines 1 and 3 (Guangzhou East Railway Station). Taxi to the Tianhe hotel is about 10 minutes.",
+    metro:"Metro Lines 1 and 3 (Guangzhou East Railway Station). Taxi to the Sofitel Guangzhou Sunrich is about 10 minutes.",
     tip:"Not Guangzhou South (广州南站), which is about 40 minutes further out."}
 };
 // Practical notes for visitors from outside the mainland.
@@ -123,6 +123,37 @@ const RAIL_NOTES=[
   ["On board","No smoking or vaping anywhere (it sets off alarms and brings fines). Hot water is free near the doors."],
   ["Changes","You can change to another train on 12306 before departure; refunds carry a small fee that rises closer to departure."],
   ["Keep your passport handy","You scan it again to leave the station, and you need it for immigration at West Kowloon."]
+];
+// Flights, hotels and door-to-door transfers (also in the private Family Trip Planner).
+// Flight times are the usual schedule; hotel contacts are from each hotel's official listing.
+const FLIGHTS=[
+  {day:1,date:"Fri 11 Dec",no:"SQ874",from:["SIN","Singapore Changi"],to:["HKG","Hong Kong Intl"],dep:"07:25",arr:"11:20",dur:"About 3 h 55",
+   tips:["Be at Changi by about 05:00 (2½ hours before). Check your terminal on the booking.","The Airport Express to Kowloon takes about 21 minutes, then a short taxi to the Mondrian.","Buy Octopus cards at the airport for MTR, buses and 7-Eleven."]},
+  {day:6,date:"Wed 16 Dec",no:"SQ895",from:["HKG","Hong Kong Intl"],to:["SIN","Singapore Changi"],dep:"18:50",arr:"≈22:40",dur:"About 3 h 50",
+   tips:["Be at the airport by about 16:00 (2½–3 hours before).","In-town check-in at Kowloon Station usually opens 24 hours before and closes 90 minutes before departure. Check SQ allows it on your ticket.","Use up HKD on Octopus cards; refund Octopus deposits at MTR counters."]}
+];
+const HOTELS=[
+  {city:"hk",name:"Mondrian Hong Kong",addr:"8A Hart Avenue, Tsim Sha Tsui",nights:"Fri 11 Dec and Tue 15 Dec",n:"2 nights (not in a row)",
+   room:"Family Room. Ask for the family bed setup; if those are sold out, a Premier Twin plus a rollaway bed.",
+   phone:"+852 3550 0388",email:"hongkong@mondrianhotels.com",map:"https://www.google.com/maps/search/?api=1&query=Mondrian+Hong+Kong+8A+Hart+Avenue"},
+  {city:"sz",name:"Four Points by Sheraton Shenzhen",addr:"5 Guihua Road, Futian",nights:"Sat 12 and Sun 13 Dec",n:"2 nights",
+   room:"Two-Bedroom Family Room, about 50 m², sleeps 4.",
+   phone:"+86 755 8359 9999",email:null,emailNote:"No public email. Message the hotel in the Marriott Bonvoy app, or call.",map:"https://uri.amap.com/search?keyword=%E6%B7%B1%E5%9C%B3%E7%A6%8F%E7%94%B0%E7%A6%8F%E6%9C%8B%E5%96%9C%E6%9D%A5%E7%99%BB%E9%85%92%E5%BA%97"},
+  {city:"gz",name:"Sofitel Guangzhou Sunrich",addr:"988 Guangzhou Da Dao Zhong, Tianhe",nights:"Mon 14 Dec",n:"1 night",
+   room:"Superior Room with 2 single beds (48 m², up to 4 guests) plus 1 extra bed.",
+   phone:"+86 20 3883 8888",email:"H6318@sofitel.com",map:"https://uri.amap.com/search?keyword=%E5%B9%BF%E5%B7%9E%E9%98%B3%E5%85%89%E5%87%AF%E8%BF%AA%E7%B4%A2%E8%8F%B2%E7%89%B9%E5%A4%A7%E9%85%92%E5%BA%97"}
+];
+// Each transfer: [city, when, title, best option, alternative, address (English), address to show the driver].
+const TRANSFERS=[
+  ["hk","Day 1 · Fri 11 Dec · after landing ~11:20","Airport → Mondrian","Taxi from the airport taxi rank (red urban taxi). About 35–45 min, about HK$300–400 including the Lantau Link toll and bags. Easiest with three people and luggage.","Airport Express to Kowloon station (about 21 min, about HK$105 each with Octopus), then a taxi to the hotel (about 10–15 min).","Mondrian Hong Kong, 8A Hart Avenue, Tsim Sha Tsui","尖沙咀赫德道8A號"],
+  ["hk","Day 2 · Sat 12 Dec · leave by 13:00","Mondrian → West Kowloon station","Taxi, about 10–15 min, about HK$60–90. Ask for “West Kowloon Station, High Speed Rail”.","MTR from East Tsim Sha Tsui to Austin, one stop on the Tuen Ma line (about 3 min), then follow the signs underground to the High Speed Rail station (about 10 min walk).","West Kowloon Station (High Speed Rail)","香港西九龍站 高鐵"],
+  ["sz","Day 2 · Sat 12 Dec · after ~14:15","Futian station → Four Points","Didi (or a taxi from the rank), about 15 min, about ¥20–35. Follow signs for 网约车 (ride-hailing) to the pick-up point.","Metro Line 3 towards Futian Bonded Area (福田保税区); get off at Fubao (福保), exit E1, then a short walk. About 25 min door to door.","Four Points by Sheraton Shenzhen, 5 Guihua Road, Futian Free Trade Zone","深圳福朋喜来登酒店 福田保税区桂花路5号"],
+  ["sz","Day 2 · if you cross by MTR instead of the train","Lok Ma Chau → Four Points","Walk, about 10–15 min, after clearing Hong Kong exit and mainland entry at Lok Ma Chau / Futian Checkpoint.","Getting there: MTR from East Tsim Sha Tsui to Hung Hom, change to the East Rail line for Lok Ma Chau (about 50 min in all).","Four Points by Sheraton Shenzhen, 5 Guihua Road","深圳福朋喜来登酒店 福田保税区桂花路5号"],
+  ["sz","Day 4 · Mon 14 Dec · leave at 13:15","Four Points → Futian station","Didi from the hotel door, about 15 min, about ¥20–35. Ask the front desk to book it if the app is fiddly.","Metro Line 3 from Fubao (福保) to Futian, then follow signs for 福田站 high-speed rail. About 25 min.","Futian Railway Station (high-speed rail)","福田站 高铁"],
+  ["gz","Day 4 · Mon 14 Dec · after ~15:00","Guangzhou East → Sofitel","Taxi from the station rank, about 10–15 min, about ¥15–25. Didi pick-ups are signposted 网约车.","Metro Line 3 to Tiyu Xilu (体育西路), then about 15–20 min on foot. Only worth it with light bags.","Sofitel Guangzhou Sunrich, 988 Guangzhou Da Dao Zhong, Tianhe","广州阳光凯迪索菲特大酒店 天河区广州大道中988号"],
+  ["gz","Day 5 · Tue 15 Dec · leave at 13:30","Sofitel → Guangzhou East station","Taxi from the hotel door, about 10–15 min, about ¥15–25. Allow extra time in the early-afternoon traffic.","Metro from Tiyu Xilu, Line 3 to Guangzhou East (about 20 min walk to the metro first).","Guangzhou East Railway Station","广州东站"],
+  ["hk","Day 5 · Tue 15 Dec · after ~16:15","West Kowloon → Mondrian","Taxi from the rank outside West Kowloon station, about 10–15 min, about HK$60–90.","MTR from Austin to East Tsim Sha Tsui, one stop on the Tuen Ma line; the hotel is a minute from exit N1/N2.","Mondrian Hong Kong, 8A Hart Avenue, Tsim Sha Tsui","尖沙咀赫德道8A號"],
+  ["hk","Day 6 · Wed 16 Dec · flight 18:50","Mondrian → Airport","Morning: taxi to Kowloon station for in-town check-in (if SQ allows it on your ticket), then you are bag-free. Afternoon: Airport Express from Kowloon (about 21 min), or a taxi via Sham Tseng for Yue Kee roast goose (about 25 min from there to the airport).","Taxi straight from the hotel to the airport, about 35–45 min, about HK$300–400. Be at the airport by about 16:00.","Hong Kong International Airport, Terminal 1","香港國際機場 一號客運大樓"]
 ];
 // Where to eat: the roast goose and dim sum stops from the day plans. `book`: true = reserve ahead, false = queue (no bookings).
 const FOOD=[
@@ -174,7 +205,9 @@ const WMO=c=>c===0?["☀️","Sunny"]:c===1?["🌤️","Mostly sunny"]:c===2?["�
   :c>=51&&c<=57?["🌦️","Drizzle"]:c>=61&&c<=67?["🌧️","Rain"]:c>=71&&c<=77?["🌨️","Snow"]:c>=80&&c<=82?["🌦️","Showers"]:c>=95?["⛈️","Thunderstorms"]:["🌡️","—"];
 let wx=null; // {t: fetched-at ms, city: {"YYYY-MM-DD": {code,max,min,rain}}}
 try{wx=JSON.parse(localStorage.getItem("wx")||"null")}catch{}
-let tripStart="";try{tripStart=localStorage.getItem("tripStart")||""}catch{}
+// The trip starts on TRIP_START; a date typed into the weather box overrides it on that device.
+const TRIP_START="2026-12-11";
+let tripStart=TRIP_START;try{tripStart=localStorage.getItem("tripStart")||TRIP_START}catch{}
 const isoDay=(iso,add)=>{const[y,m,d]=iso.split("-").map(Number);return new Date(Date.UTC(y,m-1,d+add))};
 const isoStr=dt=>dt.toISOString().slice(0,10);
 const fmtDay=(dt,o)=>dt.toLocaleDateString("en-GB",{timeZone:"UTC",...o});
@@ -259,6 +292,27 @@ $("#stations").append(...Object.values(STATIONS).map(st=>h("div",{class:"card st
   h("p",{text:st.metro}),h("p",{class:"muted",text:st.tip}),
   h("a",{class:"maplink",href:st.map,target:"_blank",rel:"noopener",text:"Open in maps"}))));
 $("#railnotes").append(...RAIL_NOTES.map(([t,x])=>h("li",{},h("b",{text:t}),h("span",{text:x}))));
+// Flights, hotels and transfers.
+const dayLink=n=>h("a",{href:"#day"+n,onclick:e=>{e.preventDefault();go(n,true,true)},text:"Day "+n});
+$("#flights").append(...FLIGHTS.map(f=>h("article",{class:"card flight"+(f.day>1?" ret":"")},
+  h("p",{class:"eyebrow"},dayLink(f.day)," · "+f.date),
+  h("div",{class:"fl-row"},
+    h("div",{},h("b",{class:"code",text:f.from[0]}),h("span",{class:"muted",text:f.from[1]}),h("span",{class:"tm",text:f.dep})),
+    h("div",{class:"fl-mid"},h("span",{class:"fl-no",text:f.no}),h("i"),h("span",{class:"muted",text:f.dur})),
+    h("div",{class:"to"},h("b",{class:"code",text:f.to[0]}),h("span",{class:"muted",text:f.to[1]}),h("span",{class:"tm",text:f.arr}))),
+  h("p",{class:"muted fl-air",text:"Singapore Airlines · 3 passengers"}),
+  h("ul",{class:"legtips"},f.tips.map(t=>h("li",{text:t}))))));
+$("#hotels").append(...HOTELS.map(o=>{const c=CITIES[o.city];return h("article",{class:"card hotel "+o.city},
+  h("p",{class:"eyebrow"},h("span",{class:"zh",text:c.zh})," "+c.en+" · "+o.n),
+  h("h3",{text:o.name}),h("p",{class:"muted addr",text:o.addr}),
+  h("dl",{class:"facts"},h("dt",{text:"Nights"}),h("dd",{text:o.nights}),h("dt",{text:"Room for 3"}),h("dd",{text:o.room}),
+    h("dt",{text:"Phone"}),h("dd",{},h("a",{href:"tel:"+o.phone.replace(/\s/g,""),text:o.phone})),
+    h("dt",{text:"Email"}),h("dd",{},o.email?h("a",{href:"mailto:"+o.email,text:o.email}):h("span",{class:"muted",text:o.emailNote}))),
+  h("a",{class:"maplink",href:o.map,target:"_blank",rel:"noopener",text:"Open in maps"}))}));
+$("#xfers").append(...TRANSFERS.map(([city,when,title,best,alt,addr,zh])=>h("article",{class:"card xfer "+city},
+  h("p",{class:"eyebrow",text:when}),h("h3",{text:title}),
+  h("dl",{class:"facts"},h("dt",{text:"Best"}),h("dd",{text:best}),h("dt",{text:"Or"}),h("dd",{text:alt})),
+  h("p",{class:"taxi"},h("span",{class:"muted",text:"For the driver"}),h("span",{class:"zh",text:zh}),h("span",{class:"muted",text:addr})))));
 // Where to eat, grouped by city in route order.
 $("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+k},
   scene(k,"strip"),
