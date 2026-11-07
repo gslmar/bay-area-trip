@@ -103,3 +103,6 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
 /* Too narrow for the rail times between stops; they're also in the Essentials table. */
 @media (max-width:380px){.leg span{display:none}}
 @media (prefers-reduced-motion:no-preference){.day{animation:rise .25s ease-out both}@keyframes rise{from{transform:translateY(4px)}to{transform:none}}}
+.alt{border-top:1px dashed var(--line);padding-top:10px}
+.alt h3{font-family:var(--f-body);margin-bottom:4px}
+.alt ul{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:3px}

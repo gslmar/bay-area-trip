@@ -4,19 +4,82 @@ const CITIES={hk:{en:"Hong Kong",zh:"香港"},sz:{en:"Shenzhen",zh:"深圳"},gz:
 // Rail connections for the Essentials table; a `leg` between neighbouring cities is also shown on the route strip.
 const RAIL=[
   {from:"HK West Kowloon",to:"Shenzhen Futian",time:"~15 min",leg:"hk-sz"},
-  {from:"HK West Kowloon",to:"Guangzhou South",time:"~50 min"},
-  {from:"Shenzhen North",to:"Guangzhou South",time:"~30 min",leg:"sz-gz"},
-  {from:"MTR East Rail",to:"Lo Wu / Lok Ma Chau",time:"~45 min"}
+  {from:"Shenzhen Futian",to:"Guangzhou East",time:"~1.5–2 h",leg:"sz-gz"},
+  {from:"Guangzhou East",to:"HK West Kowloon",time:"~1 h 50"},
+  {from:"MTR East Rail",to:"Lok Ma Chau / Futian Checkpoint",time:"~45 min"}
 ];
 // One entry per day, in order; day numbers come from the position. Plan items are [time, activity].
+// `alt` lists swaps to pick from on the day (weather, energy, queues) without breaking the train times.
 const DAYS=[
-  {city:"hk",title:"Arrive in Hong Kong",plan:[["14:00","Land at HKIA, Airport Express to Kowloon"],["16:00","Check in, rest"],["18:00","Tsim Sha Tsui waterfront and Avenue of Stars"],["20:00","Symphony of Lights from the promenade"],["21:00","Dinner on Canton Road"]]},
-  {city:"hk",title:"The Peak and Central",plan:[["08:00","Dim sum breakfast"],["10:00","Peak Tram up to Victoria Peak"],["12:30","Central, Mid-Levels escalator, PMQ"],["16:00","Star Ferry back across the harbour"],["19:30","Temple Street night market"]]},
-  {city:"hk",title:"Lantau Island",plan:[["09:00","MTR to Tung Chung"],["09:30","Ngong Ping 360 cable car"],["11:00","Tian Tan Buddha and Po Lin Monastery"],["14:00","Tai O fishing village"],["18:00","Back to the city for dinner"]]},
-  {city:"sz",title:"High-speed rail to Shenzhen",plan:[["09:30","Train from West Kowloon to Futian"],["11:00","Drop bags at the hotel"],["13:00","Lianhuashan Park, view over the Civic Center"],["16:00","Shenzhen Bay Park"],["19:00","OCT Harbour for dinner"]]},
-  {city:"sz",title:"Shenzhen sights",plan:[["10:00","Window of the World"],["15:00","Huaqiangbei electronics market"],["19:00","Sea World, Shekou"]]},
-  {city:"gz",title:"On to Guangzhou",plan:[["10:00","Train from Shenzhen North to Guangzhou South"],["12:00","Check in, Cantonese lunch"],["15:00","Canton Tower"],["19:30","Pearl River night cruise"]]},
-  {city:"gz",title:"Old Guangzhou and home",plan:[["08:00","Morning tea (早茶)"],["10:00","Shamian Island"],["12:30","Chen Clan Ancestral Hall"],["15:00","Beijing Road pedestrian street"],["18:00","Train or flight home"]]}
+  {city:"hk",title:"Arrive in Hong Kong",plan:[
+    ["11:30","Land at HKIA, Airport Express to Kowloon, taxi to the hotel in Tsim Sha Tsui East"],
+    ["13:30","Late dim sum lunch at Spring Moon (The Peninsula) or T'ang Court (The Langham). Book ahead"],
+    ["15:30","Tsim Sha Tsui promenade, Avenue of Stars, K11 Musea"],
+    ["18:30","Star Ferry across to Central"],
+    ["19:00","Roast goose dinner at Yung Kee, Wellington Street. Book ahead"],
+    ["21:00","Star Ferry back; harbour lights from the Tsim Sha Tsui side"]],
+   alt:["Dinner at Kam's Roast Goose, Wan Chai, instead of Yung Kee (no bookings, expect a queue)",
+    "Rain: stay in Harbour City and K11 Musea, then dinner",
+    "Too tired after the flight: dinner near the hotel and Temple Street night market"]},
+  {city:"sz",title:"Hong Kong morning, train to Shenzhen",plan:[
+    ["08:00","Dim sum breakfast at Luk Yu Tea House, Central"],
+    ["09:45","Peak Tram up to Victoria Peak"],
+    ["11:45","Roast goose lunch at Yat Lok, Stanley Street, Central (Michelin-starred, queue early)"],
+    ["13:00","Collect bags, taxi to West Kowloon; be there 45 min early for joint immigration"],
+    ["14:00","High-speed train West Kowloon → Futian (~15 min)"],
+    ["14:45","Didi to the hotel in the Futian Free Trade Zone (~15 min), check in"],
+    ["17:00","Lianhuashan Park, sunset over the Futian skyline"],
+    ["19:00","Civic Center light show (usually weekend evenings; check the day's schedule)"],
+    ["19:45","Dim sum and roast goose dinner at Laurel, Futian"]],
+   alt:["Instead of the 14:00 train: MTR East Rail to Lok Ma Chau, walk across Futian Checkpoint; the hotel is about 10 min on foot",
+    "Peak fogged in: Mid-Levels escalator, PMQ and Tai Kwun instead",
+    "Swap the dinner for Dian Dou De (dim sum chain, branches across Futian)"]},
+  {city:"sz",title:"Shenzhen sights",plan:[
+    ["09:00","Morning dim sum at Tao Tao Ju or Dian Dou De"],
+    ["10:30","Shenzhen Bay Park walk, then OCT Harbour"],
+    ["13:00","Cantonese lunch at OCT Harbour or Coastal City"],
+    ["15:00","Huaqiangbei electronics market"],
+    ["17:30","Coco Park or MixC for a break"],
+    ["19:00","Roast goose dinner at Fat Kee (Michelin Bib Gourmand), or The Bay by Chef Fei (two Michelin stars; book weeks ahead)"]],
+   alt:["Theme day: Window of the World 10:00–15:00, then OCT Harbour",
+    "Old Shenzhen: Nantou Ancient City, then Shekou Sea World",
+    "Art: Dafen Oil Painting Village (allow a half day)",
+    "Rain: Shenzhen Museum, Book City Central, MixC"]},
+  {city:"gz",title:"Futian to Guangzhou East",plan:[
+    ["09:00","Morning dim sum near the hotel"],
+    ["10:30","Whichever of Huaqiangbei or Coco Park you skipped yesterday"],
+    ["12:00","Check out, light lunch"],
+    ["13:15","Didi to Futian station (~15 min), passports ready for the ticket gates"],
+    ["14:00","Intercity train Futian → Guangzhou East (~1.5–2 h; pick a train with fewer stops)"],
+    ["16:00","Taxi to the hotel in Tianhe (~10 min), check in"],
+    ["17:45","Canton Tower at dusk"],
+    ["19:30","Roast goose and Cantonese classics at Guangzhou Restaurant or Lei Garden"],
+    ["21:00","Pearl River night cruise"]],
+   alt:["Train sold out near 14:00: take the nearest Futian → Guangzhou East departure; avoid Guangzhou South, which is far from the hotel",
+    "Skip the cruise: Huacheng Square and the Zhujiang New Town lights",
+    "Dinner nearer the hotel: Cheungloi Cook, Huacheng Avenue (Michelin Bib Gourmand)"]},
+  {city:"hk",title:"Guangzhou morning, back to Hong Kong",plan:[
+    ["07:45","Morning tea at Tao Tao Ju (Dishifu Road original) or Panxi Restaurant, Liwan"],
+    ["09:45","Shamian Island walk"],
+    ["11:00","Back to the hotel, check out"],
+    ["12:15","Light lunch; roast goose takeaway for the train"],
+    ["13:30","Taxi to Guangzhou East (~15 min); be there 45 min early"],
+    ["14:30","High-speed train Guangzhou East → West Kowloon (~1 h 50)"],
+    ["16:45","Taxi to the hotel in Tsim Sha Tsui East, check in"],
+    ["19:00","Roast goose dinner at Kam's Roast Goose or Joy Hing, Wan Chai"],
+    ["20:30","Temple Street night market"]],
+   alt:["Instead of Shamian Island: Chen Clan Ancestral Hall (Line 1), or Yuexiu Park and Beijing Road",
+    "Want a slower morning: dim sum at Dian Dou De near the hotel, skip Liwan",
+    "Tired on arrival: Hong Kong dinner in Tsim Sha Tsui and the harbour lights"]},
+  {city:"hk",title:"Last morning and fly home",plan:[
+    ["09:00","Check out; in-town check-in at Kowloon Station (check your airline allows it) so you're bag-free"],
+    ["10:00","Central: Tai Kwun, PMQ, last shopping"],
+    ["11:30","Trolley dim sum at Maxim's Palace, City Hall"],
+    ["14:00","Taxi to Sham Tseng for Yue Kee roast goose, on the way to the airport"],
+    ["16:00","At the airport, 2½–3 h before the evening flight"]],
+   alt:["Short on time: skip Sham Tseng, roast goose at Yat Lok or Joy Hing and Airport Express from Hong Kong Station",
+    "Rain: Harbour City and Elements, dim sum in Tsim Sha Tsui",
+    "No in-town check-in: leave bags at the hotel and collect them on the way"]}
 ].map((d,i)=>({...d,n:i+1}));
 // Flag copying slips in the data instead of rendering them silently wrong.
 for(const d of DAYS){if(!CITIES[d.city])console.warn(`Day ${d.n}: unknown city "${d.city}"`);
@@ -64,7 +127,8 @@ function render(){
       h("div",{class:"body"},
         h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
         h("h2",{tabindex:"-1",text:d.title}),
-        h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{},h("span",{class:"t",text:t}),h("span",{text:what})))))),
+        h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{},h("span",{class:"t",text:t}),h("span",{text:what})))),
+        d.alt?.length?h("div",{class:"alt"},h("h3",{class:"label",text:"Swap options on the day"}),h("ul",{},d.alt.map(a=>h("li",{text:a})))):null)),
     h("div",{class:"pnav"},
       prev?h("button",{type:"button",onclick:()=>go(prev.n,true,true)},h("span",{"aria-hidden":"true",text:"‹"}),h("span",{class:"t",text:`Day ${prev.n} · ${prev.title}`})):h("span"),
       next?h("button",{type:"button",onclick:()=>go(next.n,true,true)},h("span",{class:"t",text:`Day ${next.n} · ${next.title}`}),h("span",{"aria-hidden":"true",text:"›"})):h("span")));
