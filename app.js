@@ -121,13 +121,10 @@ const kind=what=>/(high-speed|intercity) train/i.test(what)?"rail":/dim sum|roas
 const $=s=>document.querySelector(s);
 const h=(t,a,...kids)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a||{})){if(v==null||v===false)continue;if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="class")e.className=v;else if(k==="text")e.textContent=v;else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
 
-// City illustration: a <use> of the matching SVG symbol in index.html, so it follows the light/dark colours.
-// Scenes carry extra scenery beyond their viewBox, so "meet" shows the whole skyline at any banner width.
-const NS="http://www.w3.org/2000/svg";
-const scene=(city,cls)=>{const svg=document.createElementNS(NS,"svg"),use=document.createElementNS(NS,"use");
-  svg.setAttribute("viewBox","0 0 600 200");svg.setAttribute("preserveAspectRatio","xMidYMax meet");
-  svg.setAttribute("class","scene "+cls);svg.setAttribute("aria-hidden","true");svg.setAttribute("focusable","false");
-  use.setAttribute("href","#scene-"+city);svg.append(use);return svg};
+// City photo (self-hosted, credits in the footer). Decorative here: the city is named right next to it.
+const PHOTO={hk:{big:"photos/hk.jpg",w:960},sz:{big:"photos/sz.jpg",w:960},gz:{big:"photos/gz.jpg",w:1280}};
+const scene=(city,cls)=>h("img",{class:"scene "+cls+" "+city,src:`photos/${city}-sm.jpg`,srcset:`photos/${city}-sm.jpg 640w, ${PHOTO[city].big} ${PHOTO[city].w}w`,
+  sizes:cls==="banner"?"(max-width:760px) 100vw, 728px":"(max-width:600px) 100vw, 240px",alt:"",loading:cls==="banner"?"eager":"lazy",decoding:"async"});
 
 // ---- Weather (Open-Meteo: free, no key). Only city coordinates are sent; the trip date stays on this device. ----
 const WX_DAYS=16,WX_MAX_AGE=3*3600e3;
