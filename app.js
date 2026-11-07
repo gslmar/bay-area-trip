@@ -120,6 +120,14 @@ const kind=what=>/(high-speed|intercity) train/i.test(what)?"rail":/dim sum|roas
 const $=s=>document.querySelector(s);
 const h=(t,a,...kids)=>{const e=document.createElement(t);for(const[k,v]of Object.entries(a||{})){if(v==null||v===false)continue;if(k.startsWith("on"))e.addEventListener(k.slice(2),v);else if(k==="class")e.className=v;else if(k==="text")e.textContent=v;else e.setAttribute(k,v===true?"":v)}for(const c of kids.flat()){if(c==null||c===false)continue;e.append(c.nodeType?c:document.createTextNode(String(c)))}return e};
 
+// City illustration: a <use> of the matching SVG symbol in index.html, so it follows the light/dark colours.
+// Scenes carry extra scenery beyond their viewBox, so "meet" shows the whole skyline at any banner width.
+const NS="http://www.w3.org/2000/svg";
+const scene=(city,cls)=>{const svg=document.createElementNS(NS,"svg"),use=document.createElementNS(NS,"use");
+  svg.setAttribute("viewBox","0 0 600 200");svg.setAttribute("preserveAspectRatio","xMidYMax meet");
+  svg.setAttribute("class","scene "+cls);svg.setAttribute("aria-hidden","true");svg.setAttribute("focusable","false");
+  use.setAttribute("href","#scene-"+city);svg.append(use);return svg};
+
 let cur=1;
 try{const s=+localStorage.getItem("day");if(DAYS.some(d=>d.n===s))cur=s}catch{}
 const hashDay=()=>{const t=(location.hash||"").match(/^#day(\d+)$/);return t&&DAYS.some(d=>d.n===+t[1])?+t[1]:null};
@@ -147,6 +155,7 @@ function go(n,scroll,focusTitle){cur=n;try{localStorage.setItem("day",String(n))
 function step(k){const i=DAYS.findIndex(d=>d.n===cur);const d=DAYS[i+k];if(d)go(d.n)}
 function dayCard(d){const c=CITIES[d.city];
   return h("article",{class:"day "+d.city},
+      scene(d.city,"banner"),
       h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`})),
       h("div",{class:"body"},
         h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
@@ -177,6 +186,7 @@ window.addEventListener("hashchange",()=>{const n=hashDay();if(n!=null&&n!==cur)
 
 // Where to eat, grouped by city in route order.
 $("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+k},
+  scene(k,"strip"),
   h("h3",{},h("span",{class:"zh",text:c.zh})," ",c.en),
   h("ul",{class:"food"},FOOD.filter(f=>f.city===k).map(f=>h("li",{},
     h("div",{},h("b",{text:f.name}),h("small",{class:"muted",text:` · ${f.area}`})),

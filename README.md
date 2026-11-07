@@ -12,7 +12,7 @@ All trip data lives at the top of `app.js`: `CITIES`, `RAIL` and `DAYS`. The sub
 
 `FOOD` (where to eat) and `CHECKLIST` (before you go) sit next to it. `sw.js` keeps an offline copy of the page; bump its `CACHE` name if you add or rename a file it lists.
 
-Layout and colours are in `style.css`. The fonts are self-hosted in `fonts/`. Noto Sans SC is cut down to the Chinese characters the page uses, and any new character falls back to the system font.
+Layout and colours are in `style.css`. The city pictures are original SVG illustrations defined once at the top of `index.html` (`scene-hk`, `scene-sz`, `scene-gz`) and coloured from CSS variables, so they switch to a night scene in dark mode. The fonts are self-hosted in `fonts/`. Noto Sans SC is cut down to the Chinese characters the page uses, and any new character falls back to the system font.
 
 Pushes and pull requests run html-validate on `index.html` and ESLint on `app.js` (`.github/workflows/lint.yml`).
 
