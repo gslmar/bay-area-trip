@@ -155,20 +155,12 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
 }
 
 /* ---- Lively look: illustrated city scenes, warmer colours, rounded display font ---- */
-.defs{position:absolute;width:0;height:0;overflow:hidden}
-.s1{stop-color:var(--sky1)} .s2{stop-color:var(--sky2)}
-.sun{fill:var(--sun)} .hill{fill:var(--hill)} .far{fill:var(--far)} .near{fill:var(--near)}
-.win{fill:var(--win);opacity:.75} .water{fill:var(--water)} .wave{stroke:var(--wave);stroke-width:2;stroke-linecap:round;opacity:.6;fill:none}
-.line{stroke:var(--win);stroke-width:1.2;opacity:.5;fill:none}
-.hull{fill:#6B3A22} .sail{fill:var(--hk)} .ferry{fill:#2E8B57} .cabin{fill:#F4F1E8}
-.roof{fill:var(--sz);opacity:.85} .ground{fill:var(--ground)} .hill2{fill:var(--hill2)} .tree{fill:var(--tree)}
-.tower{fill:var(--gz)} .lat{fill:var(--win);opacity:.55} .mast{stroke:var(--gz);stroke-width:3}
-.hall{fill:#B5523B} .eave{fill:#3B2A2A} .lights{fill:var(--win)}
+
 
 h1{font-weight:800;letter-spacing:0;line-height:1.05;background:linear-gradient(90deg,var(--hk),var(--gz) 50%,var(--sz));-webkit-background-clip:text;background-clip:text;color:transparent}
 .sub{font-weight:500}
 .hero{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
-.hero svg{display:block;width:100%;height:150px}
+.hero img{display:block;width:100%;height:150px;object-fit:cover}
 .route{margin-top:10px;box-shadow:var(--shadow)}
 .stop .zh{font-size:24px}
 .pager{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
@@ -177,7 +169,7 @@ h1{font-weight:800;letter-spacing:0;line-height:1.05;background:linear-gradient(
 .pill[aria-current="step"]{background:var(--city);border-color:var(--city);color:#fff}
 .pill[aria-current="step"] b{color:#fff}
 .day{grid-template-rows:auto 1fr;border-radius:20px;box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--city) 30%,var(--line))}
-.day .banner{grid-column:1/-1;display:block;width:100%;height:130px}
+.day .banner{grid-column:1/-1;display:block;width:100%;height:170px;object-fit:cover}
 .body h2{font-size:26px;font-weight:800;color:var(--city)}
 .when b{font-size:34px;font-weight:800;color:var(--city)}
 .chip{background:color-mix(in srgb,var(--city) 12%,transparent)}
@@ -186,12 +178,12 @@ h1{font-weight:800;letter-spacing:0;line-height:1.05;background:linear-gradient(
 .foods .card>:not(.strip){margin-inline:16px}
 .foods .card>ul{margin-bottom:16px}
 .foods h3{font-size:19px;margin-top:12px;margin-bottom:8px}
-.strip{display:block;width:100%;height:72px}
+.strip{display:block;width:100%;height:84px;object-fit:cover}
 .tips-h{font-size:26px;font-weight:800}
 .private{background:linear-gradient(110deg,color-mix(in srgb,var(--hk) 14%,var(--surface)),color-mix(in srgb,var(--gz) 14%,var(--surface)) 55%,color-mix(in srgb,var(--sz) 14%,var(--surface)));box-shadow:var(--shadow)}
 .cta{border-radius:999px;padding-inline:18px}
 .pnav button{border-radius:14px;box-shadow:var(--shadow)}
-@media (max-width:600px){.hero svg{height:96px}.day .banner{height:96px}.body h2{font-size:23px}}
+@media (max-width:600px){.hero img{height:96px}.day .banner{height:140px}.body h2{font-size:23px}}
 @media print{.hero,.strip,.day .banner{display:none!important}h1{color:var(--ink);background:none}}
 
 /* Weather */
@@ -214,3 +206,9 @@ h1{font-weight:800;letter-spacing:0;line-height:1.05;background:linear-gradient(
 #wx-status{margin-top:10px}
 @media (max-width:600px){.wxgrid{grid-template-columns:1fr}.when .date{margin:0 0 0 auto}}
 @media print{.wxcard{display:none}}
+
+/* Photos: keep each landmark in frame when cropped. */
+img.scene,.hero img{max-width:100%;background:var(--soft)}
+.scene.hk,.hero .hk{object-position:45% 55%} .scene.sz,.hero .sz{object-position:50% 50%} .scene.gz,.hero .gz{object-position:55% 40%}
+footer p{margin:0 0 6px}
+.credits a{color:inherit}
