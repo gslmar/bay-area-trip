@@ -6,7 +6,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self' https://api.open-meteo.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
-<meta name="theme-color" content="#E2563B">
+<meta name="theme-color" content="#14111C">
 <title>Bay Area Family Trip</title>
 <meta name="description" content="Family itinerary for Hong Kong, Shenzhen and Guangzhou.">
 <link rel="icon" href="icon-192.png" type="image/png">
@@ -15,89 +15,114 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<div class="wrap">
-  <header>
-    <h1>Bay Area Family Trip</h1>
+<header class="hero">
+  <div class="tri" aria-hidden="true">
+    <figure class="hk"><img src="photos/hk-sm.jpg" srcset="photos/hk-sm.jpg 640w, photos/hk.jpg 960w" sizes="(max-width:700px) 34vw, 34vw" alt="" width="640" height="447"><span class="zh">香港</span></figure>
+    <figure class="sz"><img src="photos/sz-sm.jpg" srcset="photos/sz-sm.jpg 640w, photos/sz.jpg 960w" sizes="(max-width:700px) 34vw, 34vw" alt="" width="640" height="480"><span class="zh">深圳</span></figure>
+    <figure class="gz"><img src="photos/gz-sm.jpg" srcset="photos/gz-sm.jpg 640w, photos/gz.jpg 1280w" sizes="(max-width:700px) 34vw, 34vw" alt="" width="640" height="426"><span class="zh">广州</span></figure>
+  </div>
+  <div class="hero-copy">
+    <p class="kicker">A family journey through the Greater Bay Area</p>
+    <h1><span class="hk">Hong Kong</span> <span class="sz">Shenzhen</span> <span class="gz">Guangzhou</span></h1>
     <p class="sub" id="sub"></p>
-    <div class="hero">
-      <img class="hk" src="photos/hk-sm.jpg" srcset="photos/hk-sm.jpg 640w, photos/hk.jpg 960w" sizes="(max-width:600px) 33vw, 250px" alt="Star Ferry crossing Victoria Harbour at sunset, Hong Kong" width="640" height="447">
-      <img class="sz" src="photos/sz-sm.jpg" srcset="photos/sz-sm.jpg 640w, photos/sz.jpg 960w" sizes="(max-width:600px) 33vw, 250px" alt="Civic Center and the Futian skyline from Lianhuashan Park, Shenzhen" width="640" height="480">
-      <img class="gz" src="photos/gz-sm.jpg" srcset="photos/gz-sm.jpg 640w, photos/gz.jpg 1280w" sizes="(max-width:600px) 33vw, 250px" alt="Canton Tower and the Pearl River at night, Guangzhou" width="640" height="426">
+    <div class="hero-cta">
+      <a class="btn primary" href="#plan">See the plan</a>
+      <a class="btn ghost" href="https://claude.ai/artifact/5FwJvGtvzKvMfABz6LJvGd" target="_blank" rel="noopener">Open the Family Trip Planner</a>
     </div>
-    <div class="route" id="route" role="group" aria-label="Route. Tap a city to jump to its first day."></div>
-  </header>
+  </div>
+</header>
 
-  <div class="private">
+<div class="wrap">
+  <div class="route" id="route" role="group" aria-label="Route. Tap a city to jump to its first day."></div>
+
+  <aside class="private">
     <div>
-      <b>Family diary, photos and votes</b>
-      <p>These are kept private. Family members open them through the invite-only Family Trip Planner.</p>
+      <p class="eyebrow">For the family</p>
+      <b>Diary, photos and votes</b>
+      <p>Kept private. Family members open them in the invite-only Family Trip Planner.</p>
     </div>
     <a class="cta" href="https://claude.ai/artifact/5FwJvGtvzKvMfABz6LJvGd" target="_blank" rel="noopener">Open the Family Trip Planner</a>
-  </div>
+  </aside>
 
-  <main id="days"></main>
+  <section class="sec" id="plan" aria-labelledby="plan-h">
+    <p class="eyebrow">The itinerary</p>
+    <h2 class="sec-h" id="plan-h">Six days, three cities</h2>
+    <main id="days"></main>
+  </section>
   <p class="sr-only" id="status" aria-live="polite"></p>
   <div id="print-days" class="print-only"></div>
 
-  <h2 class="tips-h">Weather</h2>
-  <div class="card wxcard">
-    <div class="wxhead">
-      <label for="trip-start"><b>First day of the trip</b></label>
-      <input type="date" id="trip-start">
-      <p class="muted note">Saved on this device only. Once set, each day page shows its date and that city's forecast.</p>
-    </div>
-    <div class="wxgrid" id="wx"></div>
-    <p class="muted note" id="wx-status">Loading forecast…</p>
-  </div>
+  <section class="sec" aria-labelledby="eat-h">
+    <p class="eyebrow">Where to eat</p>
+    <h2 class="sec-h" id="eat-h">Roast goose and dim sum, every day</h2>
+    <p class="lead">City by city. "Queue" places take no bookings, so go early.</p>
+    <div class="tips foods" id="food"></div>
+  </section>
 
-  <h2 class="tips-h">Where to eat</h2>
-  <p class="muted lead">Roast goose and dim sum, city by city. "Queue" places take no bookings, so go early.</p>
-  <div class="tips foods" id="food"></div>
+  <section class="sec" aria-labelledby="wx-h">
+    <p class="eyebrow">Weather</p>
+    <h2 class="sec-h" id="wx-h">What to expect</h2>
+    <div class="card wxcard">
+      <div class="wxhead">
+        <label for="trip-start"><b>First day of the trip</b></label>
+        <input type="date" id="trip-start">
+        <p class="muted note">Saved on this device only. Once set, each day page shows its date and that city's forecast.</p>
+      </div>
+      <div class="wxgrid" id="wx"></div>
+      <p class="muted note" id="wx-status">Loading forecast…</p>
+    </div>
+  </section>
 
+  <section class="sec" aria-labelledby="ess-h">
+    <p class="eyebrow">Essentials</p>
+    <h2 class="sec-h" id="ess-h">Before you go</h2>
+    <div class="tips">
+      <div class="card wide">
+        <h3>Checklist <small class="muted" id="check-count"></small></h3>
+        <ul class="checks" id="checklist"></ul>
+        <p class="muted note">Ticks are saved on this device only.</p>
+      </div>
+      <div class="card">
+        <h3>Getting between cities</h3>
+        <table class="rail"><tbody id="rail"></tbody></table>
+        <p class="muted note">High-speed rail tickets are tied to each passport. Book on the 12306 app as soon as sales open (about 15 days ahead), or at the West Kowloon counter, and bring everyone's passport. Times on the day pages are targets: take the nearest train.</p>
+      </div>
+      <div class="card">
+        <h3>Money</h3>
+        <ul>
+          <li><b>Hong Kong:</b> HKD. Load an Octopus card per person for MTR, buses and 7-Eleven.</li>
+          <li><b>Mainland:</b> RMB. Almost everything is paid with Alipay or WeChat Pay. Link a card in both apps before you leave.</li>
+          <li>Carry a little RMB cash for older relatives and small stalls.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Phones</h3>
+        <ul>
+          <li>Instagram, WhatsApp and Google don't work on mainland Wi-Fi. Roaming or a travel eSIM usually still reaches them.</li>
+          <li>Use Amap (高德地图) for maps and Didi for taxis on the mainland.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Entry and plugs</h3>
+        <ul>
+          <li>Check that every passport has 6+ months left, and check current entry rules before you fly.</li>
+          <li>Hong Kong uses UK three-pin plugs. Mainland sockets take flat two-pin (Type A) or angled three-pin (Type I) plugs. Pack a universal adapter.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</div>
 
-  <h2 class="tips-h">Essentials</h2>
-  <div class="tips">
-    <div class="card wide">
-      <h3>Before you go <small class="muted" id="check-count"></small></h3>
-      <ul class="checks" id="checklist"></ul>
-      <p class="muted note">Ticks are saved on this device only.</p>
-    </div>
-    <div class="card">
-      <h3>Getting between cities</h3>
-      <table class="rail"><tbody id="rail"></tbody></table>
-      <p class="muted note">High-speed rail tickets are tied to each passport. Book on the 12306 app as soon as sales open (about 15 days ahead), or at the West Kowloon counter, and bring everyone's passport. Times on the day pages are targets: take the nearest train.</p>
-    </div>
-    <div class="card">
-      <h3>Money</h3>
-      <ul>
-        <li><b>Hong Kong:</b> HKD. Load an Octopus card per person for MTR, buses and 7-Eleven.</li>
-        <li><b>Mainland:</b> RMB. Almost everything is paid with Alipay or WeChat Pay. Link a card in both apps before you leave.</li>
-        <li>Carry a little RMB cash for older relatives and small stalls.</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Phones</h3>
-      <ul>
-        <li>Instagram, WhatsApp and Google don't work on mainland Wi-Fi. Roaming or a travel eSIM usually still reaches them.</li>
-        <li>Use Amap (高德地图) for maps and Didi for taxis on the mainland.</li>
-      </ul>
-    </div>
-    <div class="card">
-      <h3>Entry and plugs</h3>
-      <ul>
-        <li>Check that every passport has 6+ months left, and check current entry rules before you fly.</li>
-        <li>Hong Kong uses UK three-pin plugs. Mainland sockets take flat two-pin (Type A) or angled three-pin (Type I) plugs. Pack a universal adapter.</li>
-      </ul>
-    </div>
-  </div>
-  <footer>
+<footer class="site">
+  <div class="foot-in">
+    <p class="foot-mark"><span class="zh">香港 · 深圳 · 广州</span> Bay Area Family Trip</p>
     <p>Suggested itinerary. Times are a guide; the family plans the details in the private Family Trip Planner.</p>
     <p class="credits">Photos from Wikimedia Commons, resized and cropped:
       <a href="https://commons.wikimedia.org/wiki/File:Evening_over_Hong_Kong._(38911980385).jpg">Hong Kong</a> by Bernard Spragg (CC0);
       <a href="https://commons.wikimedia.org/wiki/File:Civic_Centre_and_Futian_CBD,_Shenzhen_-_20251227,_views_from_Lianhuashan_Park.jpg">Shenzhen</a> by Pathfinbird (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>);
       <a href="https://commons.wikimedia.org/wiki/File:Canton_Tower_at_Night_20230722.jpg">Guangzhou</a> by Tim Wu (<a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>).</p>
-  </footer>
-</div>
+  </div>
+</footer>
 
 <script src="app.js"></script>
 </body>
