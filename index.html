@@ -52,6 +52,41 @@
   <p class="sr-only" id="status" aria-live="polite"></p>
   <div id="print-days" class="print-only"></div>
 
+  <section class="sec" id="rail-guide" aria-labelledby="rail-h">
+    <p class="eyebrow">High-speed rail</p>
+    <h2 class="sec-h" id="rail-h">Three trains, one guide</h2>
+    <p class="lead">Target times for each leg, trains seen in recent timetables, and how the stations work. Timetables change, so confirm the exact train on the 12306 app or the <a href="https://www.highspeed.mtr.com.hk/en/main/index.html" target="_blank" rel="noopener">MTR High Speed Rail site</a> before you book.</p>
+    <div class="trains" id="trains"></div>
+
+    <h3 class="sub-h">Route map</h3>
+    <figure class="railmap">
+      <svg viewBox="0 0 640 310" role="img" aria-labelledby="railmap-t">
+        <title id="railmap-t">Schematic map: Hong Kong West Kowloon to Shenzhen Futian is about 15 minutes; Futian to Guangzhou East about 1 to 1.5 hours; Guangzhou East back to West Kowloon about 1 hour 50 minutes via Dongguan and Shenzhen North. The MTR East Rail line to Lok Ma Chau and Futian Checkpoint is an alternative border crossing.</title>
+        <path class="ln ln-back" d="M242 50 H460 Q500 50 500 90 V250 Q500 290 460 290 H262 Q230 290 230 272"/>
+        <path class="ln ln-mtr" d="M218 262 Q140 255 140 205"/>
+        <path class="ln ln-hsr" d="M230 260 V50"/>
+        <circle class="st st-hk" cx="230" cy="260" r="11"/><circle class="st st-sz" cx="230" cy="190" r="11"/><circle class="st st-gz" cx="230" cy="50" r="11"/>
+        <circle class="st st-mid" cx="500" cy="130" r="7"/><circle class="st st-mid" cx="500" cy="205" r="7"/><circle class="st st-mid" cx="140" cy="205" r="6"/>
+        <text class="lbl" x="252" y="36">Guangzhou East</text>
+        <text class="lbl" x="252" y="195">Shenzhen Futian</text>
+        <text class="lbl" x="252" y="265">Hong Kong West Kowloon</text>
+        <text class="lbl small" x="516" y="134">Dongguan</text>
+        <text class="lbl small" x="516" y="209">Shenzhen North</text>
+        <text class="lbl small" x="126" y="198" text-anchor="end">Lok Ma Chau /</text><text class="lbl small" x="126" y="213" text-anchor="end">Futian Checkpoint</text>
+        <text class="dur" x="244" y="125">~1–1.5 h · Day 4</text>
+        <text class="dur" x="244" y="230">~15 min · Day 2</text>
+        <text class="dur" x="380" y="282" text-anchor="middle">~1 h 50 · Day 5</text>
+      </svg>
+      <figcaption class="muted">Not to scale. Solid line: your Day 2 and Day 4 trains. Curved line: the Day 5 train back to Hong Kong. Dotted line: the MTR East Rail alternative across the land border.</figcaption>
+    </figure>
+
+    <h3 class="sub-h">Stations</h3>
+    <div class="tips stations" id="stations"></div>
+
+    <h3 class="sub-h">Tips for foreign visitors</h3>
+    <ul class="railnotes" id="railnotes"></ul>
+  </section>
+
   <section class="sec" aria-labelledby="eat-h">
     <p class="eyebrow">Where to eat</p>
     <h2 class="sec-h" id="eat-h">Roast goose and dim sum, every day</h2>
@@ -85,7 +120,7 @@
       <div class="card">
         <h3>Getting between cities</h3>
         <table class="rail"><tbody id="rail"></tbody></table>
-        <p class="muted note">High-speed rail tickets are tied to each passport. Book on the 12306 app as soon as sales open (about 15 days ahead), or at the West Kowloon counter, and bring everyone's passport. Times on the day pages are targets: take the nearest train.</p>
+        <p class="muted note">High-speed rail tickets are tied to each passport. Book on the 12306 app as soon as sales open (about 15 days ahead), or at the West Kowloon counter, and bring everyone's passport. Times on the day pages are targets: take the nearest train. See the <a href="#rail-guide">high-speed rail guide</a> above.</p>
       </div>
       <div class="card">
         <h3>Money</h3>

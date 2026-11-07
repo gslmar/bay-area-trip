@@ -180,6 +180,40 @@ button{font:inherit;color:inherit}
 .wxcity p{margin:0;font-size:13px}
 #wx-status{margin-top:12px}
 
+/* ---------- High-speed rail guide ---------- */
+.sub-h{font-family:var(--f-display);font-weight:900;text-transform:uppercase;font-size:28px;margin:34px 0 12px;letter-spacing:.01em}
+.trains{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.leg-card{border-top:5px solid var(--city);display:flex;flex-direction:column;gap:8px;min-width:0}
+.leg-card .eyebrow a{color:var(--city)}
+.leg-card h3{margin:0;font-size:26px;line-height:.95}
+.legline{margin:0;color:var(--muted);font-size:14px}
+.facts{display:grid;grid-template-columns:auto 1fr;gap:2px 10px;margin:0;font-size:14px}
+.facts dt{color:var(--muted)} .facts dd{margin:0;font-weight:600}
+.samples{width:100%;border-collapse:collapse;font-size:14px}
+.samples caption{text-align:left;font-size:12px;color:var(--muted);padding-bottom:4px}
+.samples th{text-align:left;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:4px 4px}
+.samples td{padding:6px 4px;border-top:1px solid var(--line);font-family:var(--f-mono);font-variant-numeric:tabular-nums}
+.legtips{margin:0;padding-left:18px;font-size:14px;color:var(--muted);display:flex;flex-direction:column;gap:4px}
+.railmap{margin:0;background:var(--surface);border-radius:20px;padding:12px;box-shadow:var(--shadow);overflow-x:auto}
+.railmap svg{display:block;width:100%;min-width:520px;height:auto}
+.railmap figcaption{font-size:13px;margin:8px 4px 2px}
+.ln{fill:none;stroke-width:6;stroke-linecap:round}
+.ln-hsr{stroke:var(--ink)} .ln-back{stroke:var(--hk);stroke-width:4} .ln-mtr{stroke:var(--muted);stroke-width:3;stroke-dasharray:4 6}
+.st{stroke:var(--surface);stroke-width:4} .st-hk{fill:var(--hk)} .st-sz{fill:var(--sz)} .st-gz{fill:var(--gz)} .st-mid{fill:var(--muted)}
+.lbl{fill:var(--ink);font:700 16px var(--f-body)} .lbl.small{font-size:13px;font-weight:600;fill:var(--muted)}
+.dur{fill:var(--muted);font:600 12px var(--f-mono)}
+.stations{grid-template-columns:repeat(3,1fr)}
+.station{border-top:5px solid var(--city);display:flex;flex-direction:column;gap:6px;font-size:14px}
+.station h3{margin:0;font-size:22px}
+.station p{margin:0}
+.zhname .zh{font-size:22px;font-weight:700;color:var(--city)}
+.maplink{margin-top:auto;align-self:flex-start;font-weight:700;color:var(--city);min-height:32px;display:inline-flex;align-items:center}
+.railnotes{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.railnotes li{background:var(--surface);border-radius:16px;padding:14px 16px;box-shadow:var(--shadow);display:flex;flex-direction:column;gap:4px;font-size:14px;color:var(--muted)}
+.railnotes b{color:var(--ink);font-size:15px}
+@media (max-width:760px){.trains,.stations,.railnotes{grid-template-columns:1fr}}
+@media print{#rail-guide{display:none!important}}
+
 /* ---------- Footer band ---------- */
 footer.site{background:var(--night);color:var(--night-muted);font-size:13px}
 .foot-in{max-width:880px;margin:0 auto;padding-block:36px calc(40px + env(safe-area-inset-bottom,0px));padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
