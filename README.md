@@ -20,4 +20,4 @@ Pushes and pull requests run html-validate on `index.html` and ESLint on `app.js
 
 - This repo is public, and GitHub links to the site. The `noindex` tag keeps the page out of search results but doesn't hide it, so treat the page and the family-app link as public. Keep the app itself limited to invited family members in its Share settings.
 - Don't add dates, hotel names, flight numbers or anything else that would show when the house is empty.
-- The page loads nothing from other sites, sends no referrer, and sets a strict Content-Security-Policy. Checklist ticks stay in each visitor's own browser.
+- Apart from the weather forecast, the page loads nothing from other sites. Forecasts come from api.open-meteo.com, which sees only the three city coordinates and the visitor's IP address. The trip date is typed in by each family member and stays in their own browser, so it never appears on the page or in this repo. The page sends no referrer, and sets a strict Content-Security-Policy. Checklist ticks stay in each visitor's own browser.

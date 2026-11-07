@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self'; manifest-src 'self'; worker-src 'self'; connect-src 'self' https://api.open-meteo.com; base-uri 'none'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <meta name="robots" content="noindex,nofollow">
 <meta name="theme-color" content="#E2563B">
@@ -85,6 +85,17 @@
   <main id="days"></main>
   <p class="sr-only" id="status" aria-live="polite"></p>
   <div id="print-days" class="print-only"></div>
+
+  <h2 class="tips-h">Weather</h2>
+  <div class="card wxcard">
+    <div class="wxhead">
+      <label for="trip-start"><b>First day of the trip</b></label>
+      <input type="date" id="trip-start">
+      <p class="muted note">Saved on this device only. Once set, each day page shows its date and that city's forecast.</p>
+    </div>
+    <div class="wxgrid" id="wx"></div>
+    <p class="muted note" id="wx-status">Loading forecast…</p>
+  </div>
 
   <h2 class="tips-h">Where to eat</h2>
   <p class="muted lead">Roast goose and dim sum, city by city. "Queue" places take no bookings, so go early.</p>
