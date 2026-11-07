@@ -1,6 +1,7 @@
 // Trip data. Each fact lives here once; the subtitle, route strip, rail table and day pages are built from it.
 // Cities in route order.
-const CITIES={hk:{en:"Hong Kong",zh:"香港"},sz:{en:"Shenzhen",zh:"深圳"},gz:{en:"Guangzhou",zh:"广州"}};
+// lat/lon (where you stay) drive the weather forecast.
+const CITIES={hk:{en:"Hong Kong",zh:"香港",lat:22.30,lon:114.17},sz:{en:"Shenzhen",zh:"深圳",lat:22.54,lon:114.05},gz:{en:"Guangzhou",zh:"广州",lat:23.13,lon:113.32}};
 // Rail connections for the Essentials table; a `leg` between neighbouring cities is also shown on the route strip.
 const RAIL=[
   {from:"HK West Kowloon",to:"Shenzhen Futian",time:"~15 min",leg:"hk-sz"},
@@ -128,6 +129,26 @@ const scene=(city,cls)=>{const svg=document.createElementNS(NS,"svg"),use=docume
   svg.setAttribute("class","scene "+cls);svg.setAttribute("aria-hidden","true");svg.setAttribute("focusable","false");
   use.setAttribute("href","#scene-"+city);svg.append(use);return svg};
 
+// ---- Weather (Open-Meteo: free, no key). Only city coordinates are sent; the trip date stays on this device. ----
+const WX_DAYS=16,WX_MAX_AGE=3*3600e3;
+const WX_URL="https://api.open-meteo.com/v1/forecast?"+new URLSearchParams({
+  latitude:Object.values(CITIES).map(c=>c.lat).join(","),longitude:Object.values(CITIES).map(c=>c.lon).join(","),
+  daily:"weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max",timezone:"Asia/Hong_Kong",forecast_days:String(WX_DAYS)});
+const WMO=c=>c===0?["☀️","Sunny"]:c===1?["🌤️","Mostly sunny"]:c===2?["⛅","Partly cloudy"]:c===3?["☁️","Cloudy"]:c===45||c===48?["🌫️","Fog"]
+  :c>=51&&c<=57?["🌦️","Drizzle"]:c>=61&&c<=67?["🌧️","Rain"]:c>=71&&c<=77?["🌨️","Snow"]:c>=80&&c<=82?["🌦️","Showers"]:c>=95?["⛈️","Thunderstorms"]:["🌡️","—"];
+let wx=null; // {t: fetched-at ms, city: {"YYYY-MM-DD": {code,max,min,rain}}}
+try{wx=JSON.parse(localStorage.getItem("wx")||"null")}catch{}
+let tripStart="";try{tripStart=localStorage.getItem("tripStart")||""}catch{}
+const isoDay=(iso,add)=>{const[y,m,d]=iso.split("-").map(Number);return new Date(Date.UTC(y,m-1,d+add))};
+const isoStr=dt=>dt.toISOString().slice(0,10);
+const fmtDay=(dt,o)=>dt.toLocaleDateString("en-GB",{timeZone:"UTC",...o});
+const todayHK=()=>new Date(Date.now()+8*3600e3).toISOString().slice(0,10);
+const dayDate=d=>/^\d{4}-\d{2}-\d{2}$/.test(tripStart)?isoDay(tripStart,d.n-1):null;
+function wxLine(d){const dt=dayDate(d);if(!dt)return null;const key=isoStr(dt),f=wx?.[d.city]?.[key];
+  if(f){const[i,label]=WMO(f.code);return h("p",{class:"wxline"},h("span",{class:"wxi","aria-hidden":"true",text:i}),`${label} · ${Math.round(f.max)}° / ${Math.round(f.min)}°C`,f.rain!=null?` · rain ${f.rain}%`:"")}
+  if(key>todayHK())return h("p",{class:"wxline muted"},`Forecast shows from ${fmtDay(isoDay(key,1-WX_DAYS),{day:"numeric",month:"short"})}`);
+  return null}
+
 let cur=1;
 try{const s=+localStorage.getItem("day");if(DAYS.some(d=>d.n===s))cur=s}catch{}
 const hashDay=()=>{const t=(location.hash||"").match(/^#day(\d+)$/);return t&&DAYS.some(d=>d.n===+t[1])?+t[1]:null};
@@ -156,10 +177,11 @@ function step(k){const i=DAYS.findIndex(d=>d.n===cur);const d=DAYS[i+k];if(d)go(
 function dayCard(d){const c=CITIES[d.city];
   return h("article",{class:"day "+d.city},
       scene(d.city,"banner"),
-      h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`})),
+      h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`}),dayDate(d)?h("small",{class:"date",text:fmtDay(dayDate(d),{weekday:"short",day:"numeric",month:"short"})}):null),
       h("div",{class:"body"},
         h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
         h("h2",{tabindex:"-1",text:d.title}),
+        wxLine(d),
         h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{class:kind(what)||null},h("span",{class:"t",text:t}),h("span",{text:what},kind(what)==="rail"?h("span",{class:"tag",text:"Train"}):null)))),
         d.alt?.length?h("div",{class:"alt"},h("h3",{class:"label",text:"Swap options on the day"}),h("ul",{},d.alt.map(a=>h("li",{text:a})))):null));}
 function render(){
@@ -198,6 +220,27 @@ $("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+
   $("#checklist").append(...CHECKLIST.map((t,i)=>h("li",{},h("label",{},
     h("input",{type:"checkbox",id:"chk"+i,checked:!!done[t],onchange:e=>{if(e.target.checked)done[t]=1;else delete done[t];try{localStorage.setItem("checks",JSON.stringify(done))}catch{}upd()}}),
     h("span",{text:t})))));upd()}
+// Weather section: next days per city, plus the trip-date box that ties forecasts to day pages.
+function renderWx(){
+  const from=todayHK();
+  $("#wx").replaceChildren(...Object.entries(CITIES).map(([k,c])=>{const days=Object.entries(wx?.[k]||{}).filter(([t])=>t>=from).slice(0,5);
+    return h("div",{class:"wxcity "+k},h("h3",{},h("span",{class:"zh",text:c.zh})," ",c.en),
+      days.length?h("ul",{},days.map(([t,f])=>{const[i,label]=WMO(f.code);return h("li",{},
+        h("span",{class:"wd",text:t===from?"Today":fmtDay(isoDay(t,0),{weekday:"short"})}),h("span",{class:"wxi",title:label,"aria-label":label,text:i}),
+        h("span",{class:"tt",text:`${Math.round(f.max)}°/${Math.round(f.min)}°`}),h("span",{class:"rr",text:f.rain!=null?`${f.rain}%`:""}))})):h("p",{class:"muted",text:"No forecast yet."}))}));
+  render()}
+async function loadWx(){
+  const st=$("#wx-status"),stamp=t=>new Date(t).toLocaleString("en-GB",{weekday:"short",hour:"2-digit",minute:"2-digit"});
+  if(wx)renderWx();
+  if(wx&&Date.now()-wx.t<WX_MAX_AGE){st.textContent=`Updated ${stamp(wx.t)} · Open-Meteo`;return}
+  try{const r=await fetch(WX_URL,{signal:AbortSignal.timeout(10000)});if(!r.ok)throw new Error(r.status);
+    let j=await r.json();if(!Array.isArray(j))j=[j];const next={t:Date.now()};
+    Object.keys(CITIES).forEach((k,i)=>{const dl=j[i]?.daily;next[k]={};dl?.time?.forEach((t,n)=>{next[k][t]={code:dl.weather_code[n],max:dl.temperature_2m_max[n],min:dl.temperature_2m_min[n],rain:dl.precipitation_probability_max?.[n]??null}})});
+    wx=next;try{localStorage.setItem("wx",JSON.stringify(wx))}catch{}
+    renderWx();st.textContent=`Updated ${stamp(wx.t)} · Open-Meteo`}
+  catch{st.textContent=wx?`Offline: showing the forecast from ${stamp(wx.t)}`:"Forecast unavailable right now; it will load when you're online."}}
+{const inp=$("#trip-start");inp.value=tripStart;
+  inp.addEventListener("change",()=>{tripStart=inp.value;try{if(tripStart)localStorage.setItem("tripStart",tripStart);else localStorage.removeItem("tripStart")}catch{}render()})}
 // Printing shows every day, not just the current one.
 {const all=$("#print-days");
   window.addEventListener("beforeprint",()=>all.replaceChildren(...DAYS.map(dayCard)));
@@ -206,3 +249,5 @@ $("#food").append(...Object.entries(CITIES).map(([k,c])=>h("div",{class:"card "+
 if("serviceWorker"in navigator&&window.isSecureContext)navigator.serviceWorker.register("sw.js").catch(()=>{});
 history.replaceState(null,"","#day"+cur);
 render();
+renderWx();
+loadWx();
