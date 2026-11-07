@@ -12,7 +12,7 @@ All trip data lives at the top of `app.js`: `CITIES`, `RAIL` and `DAYS`. The sub
 
 `FOOD` (where to eat) and `CHECKLIST` (before you go) sit next to it. `sw.js` keeps an offline copy of the page; bump its `CACHE` name if you add or rename a file it lists.
 
-Layout and colours are in `style.css`. The city photos are in `photos/` (a 640 px and a larger copy of each), with their Wikimedia Commons sources, authors and licences in `photos/credits.json`. The credits also appear in the page footer; keep them if you swap a photo, as CC BY-SA requires. The fonts are self-hosted in `fonts/`. Noto Sans SC is cut down to the Chinese characters the page uses, and any new character falls back to the system font.
+Layout and colours are in `style.css`: a full-bleed photo hero, then brochure-style day pages. Headlines use Big Shoulders, body text Instrument Sans, and the city names Noto Serif SC (cut to those six characters). The city photos are in `photos/` (a 640 px and a larger copy of each), with their Wikimedia Commons sources, authors and licences in `photos/credits.json`. The credits also appear in the page footer; keep them if you swap a photo, as CC BY-SA requires. The fonts are self-hosted in `fonts/`. Noto Sans SC is cut down to the Chinese characters the page uses, and any new character falls back to the system font.
 
 Pushes and pull requests run html-validate on `index.html` and ESLint on `app.js` (`.github/workflows/lint.yml`).
 

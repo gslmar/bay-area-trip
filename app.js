@@ -152,7 +152,7 @@ const hashDay=()=>{const t=(location.hash||"").match(/^#day(\d+)$/);return t&&DA
 cur=hashDay()??cur;
 
 const names=Object.values(CITIES).map(c=>c.en);
-$("#sub").textContent=`${DAYS.length} days · ${names.slice(0,-1).join(", ")} and ${names.at(-1)}`;
+$("#sub").textContent=`${DAYS.length} days · ${names.length} cities · ${RAIL.filter(r=>r.leg).length+1} train rides · roast goose and dim sum every day`;
 $("#route").append(...Object.entries(CITIES).flatMap(([k,c],i,all)=>{
   const n=DAYS.filter(d=>d.city===k).length,leg=i&&RAIL.find(r=>r.leg===`${all[i-1][0]}-${k}`);
   return[i?h("div",{class:"leg"},h("i"),leg&&h("span",{text:leg.time+" rail"})):null,
@@ -172,12 +172,13 @@ function go(n,scroll,focusTitle){cur=n;try{localStorage.setItem("day",String(n))
   if(scroll)$("#days").scrollIntoView({behavior:"smooth",block:"start"})}
 function step(k){const i=DAYS.findIndex(d=>d.n===cur);const d=DAYS[i+k];if(d)go(d.n)}
 function dayCard(d){const c=CITIES[d.city];
+  const dt=dayDate(d);
   return h("article",{class:"day "+d.city},
-      scene(d.city,"banner"),
-      h("div",{class:"when"},h("small",{text:"Day"}),h("b",{text:d.n}),h("small",{text:`of ${DAYS.length}`}),dayDate(d)?h("small",{class:"date",text:fmtDay(dayDate(d),{weekday:"short",day:"numeric",month:"short"})}):null),
+      h("div",{class:"cover"},scene(d.city,"banner"),
+        h("div",{class:"cover-copy"},
+          h("p",{class:"kicker"},h("span",{class:"zh",text:c.zh}),` ${c.en} · Day ${d.n} of ${DAYS.length}`,dt?` · ${fmtDay(dt,{weekday:"short",day:"numeric",month:"short"})}`:""),
+          h("h2",{tabindex:"-1",text:d.title}))),
       h("div",{class:"body"},
-        h("span",{class:"chip "+d.city},h("span",{class:"zh",text:c.zh}),c.en),
-        h("h2",{tabindex:"-1",text:d.title}),
         wxLine(d),
         h("ul",{class:"plan"},d.plan.map(([t,what])=>h("li",{class:kind(what)||null},h("span",{class:"t",text:t}),h("span",{text:what},kind(what)==="rail"?h("span",{class:"tag",text:"Train"}):null)))),
         d.alt?.length?h("div",{class:"alt"},h("h3",{class:"label",text:"Swap options on the day"}),h("ul",{},d.alt.map(a=>h("li",{text:a})))):null));}
