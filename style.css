@@ -1,28 +1,36 @@
 /* Self-hosted subsets of Google Fonts (OFL), so visitors' browsers never contact Google.
    Noto Sans SC is cut to the Chinese characters on the page; any new ones fall back to the system CJK font. */
-@font-face{font-family:"Bricolage Grotesque";font-style:normal;font-weight:500 700;font-display:swap;src:url(fonts/bricolage-grotesque.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
+@font-face{font-family:"Baloo 2";font-style:normal;font-weight:500 800;font-display:swap;src:url(fonts/baloo-2.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:"JetBrains Mono";font-style:normal;font-weight:500;font-display:swap;src:url(fonts/jetbrains-mono.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:"Noto Sans";font-style:normal;font-weight:400 600;font-display:swap;src:url(fonts/noto-sans.woff2) format("woff2");unicode-range:U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD}
 @font-face{font-family:"Noto Sans SC";font-style:normal;font-weight:500 700;font-display:swap;src:url(fonts/noto-sans-sc.woff2) format("woff2");unicode-range:U+56fe, U+5730, U+5733, U+5dde, U+5e7f, U+5fb7, U+65e9, U+6df1, U+6e2f, U+8336, U+9999, U+9ad8}
 /* Layout: a read-only travel ticket — route strip, one day per page, essentials below. */
 :root{
-  --bg:#F1F4F3; --surface:#FFFFFF; --soft:#E5ECEA; --line:#D5DEDB;
-  --ink:#13201E; --muted:#586764; --accent:#0D6B59; --accent-ink:#FFFFFF;
-  --hk:#C3302A; --sz:#1B6BB2; --gz:#8A5A12;
-  --f-display:"Bricolage Grotesque","Noto Sans",system-ui,sans-serif;
+  --bg:#FFF6EE; --surface:#FFFFFF; --soft:#FFEDE1; --line:#F2DCCB;
+  --ink:#2A1B2E; --muted:#6B5866; --accent:#0A7B66; --accent-ink:#FFFFFF;
+  --hk:#D12F36; --sz:#1769C2; --gz:#A35F00;
+  /* Illustration palette: a sunset by day, city lights by night. */
+  --sky1:#8FD3FF; --sky2:#FFD3A8; --sun:#FFB04C; --hill:#BCC8E8; --far:#A8B6DA; --near:#4A4F7A;
+  --win:#FFE7A6; --water:#5AA9E6; --wave:#FFFFFF; --ground:#8CCB7E; --tree:#4E9E5C; --hill2:#79B86C;
+  --shadow:0 10px 28px -18px rgba(90,40,30,.45);
+  --f-display:"Baloo 2","Noto Sans",system-ui,sans-serif;
   --f-body:"Noto Sans","Noto Sans SC",system-ui,-apple-system,"Segoe UI",sans-serif;
   --f-zh:"Noto Sans SC","PingFang SC","Microsoft YaHei",sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
   color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root{
-  --bg:#0E1615; --surface:#162120; --soft:#1C2A28; --line:#2A3936;
-  --ink:#E6EDEB; --muted:#98A7A4; --accent:#3DB496; --accent-ink:#05201A;
-  --hk:#F06A61; --sz:#62A8EA; --gz:#E2A84E; color-scheme:dark;
+  --bg:#0E1024; --surface:#171A35; --soft:#21254C; --line:#30356A;
+  --ink:#F0ECFA; --muted:#AEABCB; --accent:#3FD3B0; --accent-ink:#05201A;
+  --hk:#FF6B6B; --sz:#5CB3FF; --gz:#F5B544;
+  --sky1:#0A1240; --sky2:#3F2A72; --sun:#F4EFC6; --hill:#1E2452; --far:#272E62; --near:#11142C;
+  --win:#FFD45C; --water:#132A5E; --wave:#5CB3FF; --ground:#173528; --tree:#22573C; --hill2:#1D4632;
+  --shadow:0 10px 28px -16px rgba(0,0,0,.8);
+  color-scheme:dark;
 }}
 *{box-sizing:border-box}
 html{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
+body{margin:0;min-height:100vh;background:radial-gradient(900px 520px at -10% -5%,color-mix(in srgb,var(--hk) 20%,transparent),transparent 65%),radial-gradient(800px 520px at 110% 8%,color-mix(in srgb,var(--sz) 20%,transparent),transparent 65%),radial-gradient(900px 640px at 50% 105%,color-mix(in srgb,var(--gz) 22%,transparent),transparent 65%),var(--bg);background-attachment:fixed;color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.55}
 img{max-width:100%}
 [hidden]{display:none!important}
 .wrap{max-width:760px;margin:0 auto;padding-block:20px 56px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px))}
@@ -145,3 +153,43 @@ footer{margin-top:28px;font-size:12px;color:var(--muted)}
   .print-only .day{break-inside:avoid;margin-top:10px;animation:none}
   .card{break-inside:avoid}
 }
+
+/* ---- Lively look: illustrated city scenes, warmer colours, rounded display font ---- */
+.defs{position:absolute;width:0;height:0;overflow:hidden}
+.s1{stop-color:var(--sky1)} .s2{stop-color:var(--sky2)}
+.sun{fill:var(--sun)} .hill{fill:var(--hill)} .far{fill:var(--far)} .near{fill:var(--near)}
+.win{fill:var(--win);opacity:.75} .water{fill:var(--water)} .wave{stroke:var(--wave);stroke-width:2;stroke-linecap:round;opacity:.6;fill:none}
+.line{stroke:var(--win);stroke-width:1.2;opacity:.5;fill:none}
+.hull{fill:#6B3A22} .sail{fill:var(--hk)} .ferry{fill:#2E8B57} .cabin{fill:#F4F1E8}
+.roof{fill:var(--sz);opacity:.85} .ground{fill:var(--ground)} .hill2{fill:var(--hill2)} .tree{fill:var(--tree)}
+.tower{fill:var(--gz)} .lat{fill:var(--win);opacity:.55} .mast{stroke:var(--gz);stroke-width:3}
+.hall{fill:#B5523B} .eave{fill:#3B2A2A} .lights{fill:var(--win)}
+
+h1{font-weight:800;letter-spacing:0;line-height:1.05;background:linear-gradient(90deg,var(--hk),var(--gz) 50%,var(--sz));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{font-weight:500}
+.hero{display:grid;grid-template-columns:repeat(3,1fr);gap:4px;margin-top:14px;border-radius:18px;overflow:hidden;box-shadow:var(--shadow)}
+.hero svg{display:block;width:100%;height:150px}
+.route{margin-top:10px;box-shadow:var(--shadow)}
+.stop .zh{font-size:24px}
+.pager{background:color-mix(in srgb,var(--bg) 82%,transparent);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.pill{border-radius:14px;box-shadow:var(--shadow)}
+.pill b{font-size:20px}
+.pill[aria-current="step"]{background:var(--city);border-color:var(--city);color:#fff}
+.pill[aria-current="step"] b{color:#fff}
+.day{grid-template-rows:auto 1fr;border-radius:20px;box-shadow:var(--shadow);border-color:color-mix(in srgb,var(--city) 30%,var(--line))}
+.day .banner{grid-column:1/-1;display:block;width:100%;height:130px}
+.body h2{font-size:26px;font-weight:800;color:var(--city)}
+.when b{font-size:34px;font-weight:800;color:var(--city)}
+.chip{background:color-mix(in srgb,var(--city) 12%,transparent)}
+.card{border-radius:18px;box-shadow:var(--shadow)}
+.foods .card{padding:0;overflow:hidden;border-top:0}
+.foods .card>:not(.strip){margin-inline:16px}
+.foods .card>ul{margin-bottom:16px}
+.foods h3{font-size:19px;margin-top:12px;margin-bottom:8px}
+.strip{display:block;width:100%;height:72px}
+.tips-h{font-size:26px;font-weight:800}
+.private{background:linear-gradient(110deg,color-mix(in srgb,var(--hk) 14%,var(--surface)),color-mix(in srgb,var(--gz) 14%,var(--surface)) 55%,color-mix(in srgb,var(--sz) 14%,var(--surface)));box-shadow:var(--shadow)}
+.cta{border-radius:999px;padding-inline:18px}
+.pnav button{border-radius:14px;box-shadow:var(--shadow)}
+@media (max-width:600px){.hero svg{height:96px}.day .banner{height:96px}.body h2{font-size:23px}}
+@media print{.hero,.strip,.day .banner{display:none!important}h1{color:var(--ink);background:none}}
